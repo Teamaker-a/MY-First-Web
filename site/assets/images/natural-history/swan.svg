@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 250" fill="none">
+  <g stroke="#66725e" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M74 161C52 155 41 145 38 134 54 138 67 147 81 157Z" fill="#e9e1d0" fill-opacity=".9"/>
+    <path d="M62 166C88 145 122 137 160 139 196 141 230 151 252 168 230 185 188 195 146 190 107 186 77 177 62 166Z" fill="#f2ebdc" fill-opacity=".9"/>
+    <path d="M104 159C130 146 166 144 199 155 185 171 154 181 123 176 112 172 105 165 104 159Z" fill="#f3ecdc" fill-opacity=".65"/>
+    <path d="M115 161C136 153 164 153 188 159M110 169C136 162 165 162 189 167M130 150C146 145 163 144 180 147" fill="none" stroke-opacity=".3"/>
+    <path d="M200 151C224 140 238 120 236 98 234 80 242 63 256 60 270 57 280 67 277 79 274 89 264 92 257 86 249 100 250 112 255 125 262 145 244 160 218 164Z" fill="#f7f0e2"/>
+    <path d="M257 79C270 75 282 78 289 84 281 92 271 94 260 90Z" fill="#c5a279" stroke-opacity=".6"/>
+    <path d="M264 71C273 67 281 69 286 74 279 79 271 80 264 77Z" fill="#78856d" fill-opacity=".4"/>
+    <circle cx="263" cy="70" r="1.6" fill="#5f6c58"/>
+    <path d="M268 92C276 98 281 106 282 116M258 94C266 102 270 111 270 122" fill="none" stroke-opacity=".27"/>
+    <path d="M118 151l3 15M131 149l2 17M144 148l2 18M157 149l1 18M170 150l1 17M183 153v15M194 158l-1 12" fill="none" stroke-opacity=".16"/>
+    <path d="M83 168C110 160 149 158 186 162M67 177C103 168 145 166 184 172" fill="none" stroke-opacity=".2"/>
+    <path d="M205 164C221 159 235 154 247 148M193 173C211 169 226 164 239 157" fill="none" stroke-opacity=".18"/>
+    <path d="M209 153C230 141 240 121 238 100" fill="none" stroke-opacity=".24"/>
+    <path d="M258 62C266 59 274 62 278 67 272 71 266 70 260 67Z" fill="#6b755f" fill-opacity=".6"/>
+    <circle cx="263" cy="68" r="1.6" fill="#4b5748"/>
+    <path d="M45 201C83 194 128 193 168 198 208 203 245 202 278 194M68 212C108 205 151 205 188 210 218 214 244 212 266 207M112 222C141 217 174 218 203 222" fill="none" stroke="#87947f" stroke-opacity=".26"/>
+  </g>
+</svg>

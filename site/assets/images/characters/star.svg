@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="star" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff0a8"/>
+      <stop offset="1" stop-color="#ffd25e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- arms -->
+  <path d="M46 126c-16 6-24 18-18 26 7 8 20 2 28-10M154 126c16 6 24 18 18 26-7 8-20 2-28-10" fill="#ffe28a" stroke="#241d1c" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- star body -->
+  <path d="M100 22l20 50 52 4-40 34 14 54-46-28-46 28 14-54-40-34 52-4Z" fill="url(#star)" stroke="#241d1c" stroke-width="6" stroke-linejoin="round"/>
+
+  <!-- face -->
+  <ellipse cx="80" cy="104" rx="10" ry="13" fill="#241d1c"/>
+  <ellipse cx="120" cy="104" rx="10" ry="13" fill="#241d1c"/>
+  <circle cx="84" cy="99" r="3" fill="#ffffff"/>
+  <circle cx="124" cy="99" r="3" fill="#ffffff"/>
+  <path d="M92 122q8 7 16 0" fill="none" stroke="#241d1c" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="62" cy="118" rx="8" ry="4" fill="#ff9fc4" opacity=".6"/>
+  <ellipse cx="138" cy="118" rx="8" ry="4" fill="#ff9fc4" opacity=".6"/>
+
+  <!-- paws on the frame -->
+  <ellipse cx="52" cy="184" rx="16" ry="10" fill="#ffe9a6" stroke="#241d1c" stroke-width="6"/>
+  <ellipse cx="148" cy="184" rx="16" ry="10" fill="#ffe9a6" stroke="#241d1c" stroke-width="6"/>
+</svg>

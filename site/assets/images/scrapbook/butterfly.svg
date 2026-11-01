@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" fill="none">
+  <defs>
+    <linearGradient id="wingA" x1="36" y1="24" x2="150" y2="140" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#e8cbc6"/>
+      <stop offset=".55" stop-color="#d3aaa6"/>
+      <stop offset="1" stop-color="#b48687"/>
+    </linearGradient>
+    <linearGradient id="wingB" x1="110" y1="80" x2="200" y2="160" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d8b1ad"/>
+      <stop offset="1" stop-color="#a97b7e"/>
+    </linearGradient>
+  </defs>
+  <g stroke="#7c605c" stroke-opacity=".62" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M116 98C84 54 34 28 20 52c-15 26 18 58 76 62Z" fill="url(#wingA)"/>
+    <path d="M124 98c32-44 82-70 96-46 15 26-18 58-76 62Z" fill="url(#wingA)"/>
+    <path d="M114 108c-26 32-68 60-82 40-13-19 22-45 72-52Z" fill="url(#wingB)"/>
+    <path d="M126 108c26 32 68 60 82 40 13-19-22-45-72-52Z" fill="url(#wingB)"/>
+    <path d="M118 74c-10-12-18-20-28-25M122 74c10-12 18-20 28-25" stroke-opacity=".5"/>
+    <path d="M62 72c18 10 32 18 46 24M178 72c-18 10-32 18-46 24M60 122c20-6 36-10 48-14M180 122c-20-6-36-10-48-14" stroke-opacity=".28"/>
+    <ellipse cx="120" cy="104" rx="5.5" ry="25" fill="#66504c" stroke="none"/>
+  </g>
+</svg>

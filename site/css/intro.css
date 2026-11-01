@@ -1,0 +1,342 @@
+.travel-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: #f4e8d5;
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 44%, rgba(117, 77, 122, 0.32), transparent 70%),
+    radial-gradient(ellipse 46% 38% at 50% 98%, rgba(93, 57, 84, 0.24), transparent 70%),
+    linear-gradient(160deg, #1c1228, #0b0812 55%, #1a1122);
+  box-shadow: inset 0 0 220px rgba(0, 0, 0, 0.62);
+  clip-path: circle(150% at 50% 50%);
+}
+
+html.skip-travel-intro .travel-intro {
+  display: none;
+}
+
+body.intro-active {
+  overflow: hidden;
+}
+
+body.intro-active .travel-nav,
+body.intro-active .globe-stage {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.travel-page .travel-nav,
+.travel-page .globe-stage {
+  transition: opacity 0.8s ease;
+}
+
+.intro-pattern {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  width: min(1320px, 118vw);
+  aspect-ratio: 1;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.9;
+  mask-image: radial-gradient(circle, #000 0 42%, rgba(0, 0, 0, 0.72) 55%, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle, #000 0 42%, rgba(0, 0, 0, 0.72) 55%, transparent 72%);
+}
+
+.intro-pattern::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    repeating-conic-gradient(from 0deg, rgba(216, 173, 109, 0.17) 0deg 0.5deg, transparent 0.5deg 15deg),
+    repeating-radial-gradient(circle, transparent 0 66px, rgba(216, 173, 109, 0.14) 66px 67px),
+    repeating-radial-gradient(circle, transparent 0 158px, rgba(216, 173, 109, 0.08) 158px 160px),
+    radial-gradient(circle, rgba(216, 173, 109, 0.08), transparent 56%);
+  animation: introOrbit 95s linear infinite;
+}
+
+.intro-pattern::after {
+  content: "";
+  position: absolute;
+  inset: 18%;
+  border: 1px solid rgba(216, 173, 109, 0.22);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 36px rgba(216, 173, 109, 0.025),
+    0 0 0 37px rgba(216, 173, 109, 0.09);
+  background:
+    conic-gradient(from 22.5deg, transparent 0 44deg, rgba(216, 173, 109, 0.14) 44deg 45deg, transparent 45deg 90deg);
+  animation: introOrbitReverse 70s linear infinite;
+}
+
+@keyframes introOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes introOrbitReverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.intro-dust {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.intro-center {
+  position: relative;
+  z-index: 3;
+  width: min(980px, 90vw);
+  padding: 24px;
+  text-align: center;
+}
+
+.intro-kicker {
+  margin: 0 0 22px;
+  color: #d8ad6d;
+  font-family: var(--serif);
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+}
+
+.intro-title {
+  margin: 0;
+  color: #f4e8d5;
+  font-family: "WenKai", "Songti SC", "Noto Serif SC", Georgia, serif;
+  font-size: clamp(52px, 9.5vw, 132px);
+  font-weight: 400;
+  letter-spacing: 0.045em;
+  line-height: 1.06;
+  text-shadow:
+    0 0 26px rgba(216, 173, 109, 0.26),
+    0 0 70px rgba(160, 90, 120, 0.18);
+}
+
+.intro-sub {
+  margin: 24px 0 34px;
+  color: rgba(244, 232, 213, 0.58);
+  font-family: var(--serif);
+  font-size: clamp(11px, 1.1vw, 14px);
+  letter-spacing: 0.2em;
+}
+
+.intro-enter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 13px 28px;
+  border: 1px solid rgba(216, 173, 109, 0.55);
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.055);
+  color: #f4e8d5;
+  font-family: var(--serif);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: border-color 0.25s, background 0.25s, transform 0.25s;
+}
+
+.intro-enter:hover {
+  border-color: #d8ad6d;
+  background: rgba(216, 173, 109, 0.16);
+  transform: translateY(-2px);
+}
+
+.intro-enter-arrow {
+  color: #d8ad6d;
+  font-size: 14px;
+  transition: transform 0.25s;
+}
+
+.intro-enter:hover .intro-enter-arrow {
+  transform: translate(2px, -2px);
+}
+
+.intro-sound {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  margin: 20px auto 0;
+  padding: 4px 6px;
+  border: 0;
+  background: none;
+  color: rgba(244, 232, 213, 0.4);
+  font-family: var(--serif);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.intro-sound:hover {
+  color: rgba(244, 232, 213, 0.8);
+}
+
+.intro-sound-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(244, 232, 213, 0.3);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.intro-sound[aria-pressed="true"] {
+  color: #f4e8d5;
+}
+
+.intro-sound[aria-pressed="true"] .intro-sound-dot {
+  background: #d8ad6d;
+  box-shadow: 0 0 9px rgba(216, 173, 109, 0.8);
+}
+
+.intro-brand {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  z-index: 4;
+  transform: translateX(-50%);
+  color: rgba(244, 232, 213, 0.62);
+  font-family: var(--serif);
+  font-size: 10px;
+  letter-spacing: 0.38em;
+  white-space: nowrap;
+}
+
+.intro-brand span {
+  color: #d8ad6d;
+}
+
+.intro-skip {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  z-index: 4;
+  padding: 4px 0;
+  border: 0;
+  border-bottom: 1px solid rgba(216, 173, 109, 0.28);
+  background: none;
+  color: rgba(244, 232, 213, 0.4);
+  font-family: var(--serif);
+  font-size: 9px;
+  letter-spacing: 0.26em;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.intro-skip:hover {
+  color: #f4e8d5;
+  border-color: #d8ad6d;
+}
+
+@media (max-width: 900px) {
+  .intro-brand {
+    top: 18px;
+    font-size: 8.5px;
+    letter-spacing: 0.28em;
+  }
+
+  .intro-skip {
+    top: 14px;
+    right: 18px;
+    font-size: 8px;
+  }
+
+  .intro-center {
+    width: 92vw;
+    padding: 16px;
+  }
+
+  .intro-kicker {
+    margin-bottom: 16px;
+    font-size: 8.5px;
+    letter-spacing: 0.32em;
+  }
+
+  .intro-title {
+    font-size: clamp(48px, 13vw, 72px);
+  }
+
+  .intro-sub {
+    margin: 18px 0 26px;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+  }
+
+  .intro-enter {
+    padding: 11px 22px;
+    font-size: 11px;
+  }
+
+  .intro-sound {
+    margin-top: 18px;
+    font-size: 8px;
+  }
+
+  .intro-pattern {
+    width: 165vw;
+    opacity: 0.72;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-pattern::before,
+  .intro-pattern::after {
+    animation: none;
+  }
+}
+
+/* 2026-10-22 · 与旅行页一致的暗茶褐旧纸底色 */
+.travel-intro {
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 44%, rgba(125, 101, 78, 0.22), transparent 70%),
+    radial-gradient(ellipse 46% 38% at 50% 98%, rgba(97, 78, 63, 0.2), transparent 70%),
+    linear-gradient(160deg, #352d26, #221d19 55%, #191613);
+  box-shadow: inset 0 0 220px rgba(0, 0, 0, 0.55);
+}
+
+.travel-intro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border: clamp(62px, 8.7vw, 126px) solid transparent;
+  border-image-source: url("../assets/images/travel/victorian-frame.svg?v=20261023c");
+  border-image-slice: 260;
+  border-image-width: 1;
+  border-image-repeat: stretch;
+  opacity: 0.44;
+}
+
+.intro-pattern {
+  opacity: 0.68;
+}
+
+@media (max-width: 900px) {
+  .travel-intro::before {
+    border-width: clamp(46px, 12.5vw, 70px);
+    opacity: 0.36;
+  }
+}

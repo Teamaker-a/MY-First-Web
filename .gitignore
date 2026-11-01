@@ -1,0 +1,23 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Python cache
+__pycache__/
+*.py[cod]
+.venv/
+
+# Local / logs / secrets
+*.log
+.env
+.env.*
+*.pem
+
+# Node
+node_modules/
+
+# Local preview output
+_site_preview/

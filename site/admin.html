@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>内容管理 · 沈旭斐</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="css/fonts.css?v=20261101a">
+  <link rel="stylesheet" href="css/admin.css?v=20261101a">
+</head>
+<body class="admin-page">
+  <div class="admin-grain" aria-hidden="true"></div>
+
+  <section class="login-view" id="loginView">
+    <div class="login-panel">
+      <p class="admin-kicker">SHEN XUFEI · CONTENT STUDIO</p>
+      <h1>连接仓库</h1>
+      <p class="login-intro">用 GitHub Token 登录，直接编辑仓库里的文章与个人资料。保存会生成一次 Git commit，托管平台随后自动构建。</p>
+
+      <form class="login-form" id="loginForm">
+        <label class="field">
+          <span>GitHub Token</span>
+          <input id="tokenInput" type="password" placeholder="github_pat_..." autocomplete="off" spellcheck="false" required>
+        </label>
+        <label class="field">
+          <span>仓库</span>
+          <input id="repoInput" type="text" placeholder="owner/repository" autocomplete="off" spellcheck="false" required>
+        </label>
+        <div class="field-row">
+          <label class="field">
+            <span>分支</span>
+            <input id="branchInput" type="text" value="main" autocomplete="off" spellcheck="false">
+          </label>
+          <label class="field">
+            <span>站点根目录</span>
+            <input id="siteRootInput" type="text" placeholder="site" autocomplete="off" spellcheck="false">
+          </label>
+        </div>
+
+        <details class="advanced">
+          <summary>内容路径设置</summary>
+          <label class="field">
+            <span>内容文件（仓库内）</span>
+            <input id="contentPathInput" type="text" value="site/content/site.json" autocomplete="off" spellcheck="false">
+          </label>
+          <label class="field">
+            <span>图片目录（仓库内）</span>
+            <input id="mediaPathInput" type="text" value="site/assets/images/uploads" autocomplete="off" spellcheck="false">
+          </label>
+          <p class="field-note">如果仓库根目录就是网站根目录，把站点根目录留空，内容路径改成 `content/site.json`。</p>
+        </details>
+
+        <button class="primary-btn" id="loginButton" type="submit">登录并连接</button>
+        <p class="form-note">Token 只保存在当前标签页的 sessionStorage，不写入仓库。建议使用只授权该仓库 Contents 读写权限的 Fine-grained Token。</p>
+        <p class="form-error" id="loginError" role="alert"></p>
+      </form>
+
+      <a class="back-link" href="index.html">← 返回网站</a>
+    </div>
+    <p class="login-foot">CONTENT IS COMMITTED TO GIT · BUILT BY YOUR HOST</p>
+  </section>
+
+  <section class="app-view" id="appView" hidden>
+    <aside class="sidebar">
+      <a class="sidebar-brand" href="index.html">
+        <span class="sidebar-mark"></span>
+        <span>
+          <strong>沈旭斐</strong>
+          <small>CONTENT STUDIO</small>
+        </span>
+      </a>
+
+      <nav class="side-nav" aria-label="后台导航">
+        <button class="side-link active" type="button" data-view="articles">
+          <span class="side-num">01</span>
+          <span>文章</span>
+        </button>
+        <button class="side-link" type="button" data-view="profile">
+          <span class="side-num">02</span>
+          <span>个人资料</span>
+        </button>
+        <button class="side-link" type="button" data-view="settings">
+          <span class="side-num">03</span>
+          <span>设置</span>
+        </button>
+      </nav>
+
+      <div class="repo-card">
+        <span class="repo-label">REPOSITORY</span>
+        <strong id="repoLabel">—</strong>
+        <small id="branchLabel">—</small>
+        <a id="repoLink" href="#" target="_blank" rel="noreferrer">在 GitHub 查看 ↗</a>
+      </div>
+
+      <div class="account-card">
+        <span class="account-dot"></span>
+        <span id="accountLabel">未连接</span>
+      </div>
+      <button class="logout-btn" id="logoutButton" type="button">退出登录</button>
+    </aside>
+
+    <main class="workspace">
+      <header class="workspace-head">
+        <div>
+          <p class="admin-kicker">CONTENT MANAGEMENT</p>
+          <h1 id="viewTitle">文章</h1>
+        </div>
+        <div class="head-status">
+          <span class="status-pill" id="saveStatus">已连接</span>
+          <a class="head-link" id="commitLink" href="#" target="_blank" rel="noreferrer" hidden>查看提交 ↗</a>
+        </div>
+      </header>
+
+      <section class="panel articles-panel" id="articlesPanel">
+        <div class="panel-intro">
+          <p>编辑文章列表。标题、日期、标签、摘要和正文会一起提交到内容文件。</p>
+          <button class="primary-btn small" id="newArticleBtn" type="button">＋ 新文章</button>
+        </div>
+
+        <div class="article-layout">
+          <aside class="article-list-wrap">
+            <div class="list-caption">
+              <span>全部文章</span>
+              <span id="articleCount">0</span>
+            </div>
+            <div class="article-list" id="articleList"></div>
+          </aside>
+
+          <section class="editor-card" id="editorCard">
+            <div class="editor-empty" id="editorEmpty">
+              <span class="empty-mark">✿</span>
+              <h2>选择一篇文章</h2>
+              <p>或新建一篇文章，开始编辑。</p>
+            </div>
+
+            <form class="editor-form" id="articleForm" hidden>
+              <div class="editor-head">
+                <div>
+                  <p class="admin-kicker" id="editorMode">EDIT ARTICLE</p>
+                  <h2 id="editorHeading">编辑文章</h2>
+                </div>
+                <div class="editor-actions">
+                  <a class="text-btn" id="viewArticleLink" href="#" target="_blank" rel="noreferrer" hidden>在网站查看 ↗</a>
+                  <button class="danger-btn" id="deleteArticleBtn" type="button">删除</button>
+                  <button class="primary-btn small" type="submit">保存文章</button>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <label class="field grow">
+                  <span>标题</span>
+                  <input id="articleTitleInput" type="text" required>
+                </label>
+                <label class="field">
+                  <span>日期</span>
+                  <input id="articleDateInput" type="month">
+                </label>
+              </div>
+
+              <div class="field-row">
+                <label class="field">
+                  <span>Slug（链接标识）</span>
+                  <input id="articleSlugInput" type="text" pattern="[a-z0-9-]+" placeholder="my-article" required>
+                </label>
+                <label class="field grow">
+                  <span>标签</span>
+                  <input id="articleTagInput" type="text" placeholder="随笔">
+                </label>
+              </div>
+
+              <label class="field">
+                <span>摘要</span>
+                <textarea id="articleExcerptInput" rows="2" placeholder="一句话摘要，会显示在文章列表"></textarea>
+              </label>
+
+              <label class="field">
+                <span>正文</span>
+                <textarea id="articleBodyInput" rows="18" placeholder="段落之间空一行。&#10;&#10;上传图片会插入 ![说明](路径) 形式的独立段落。"></textarea>
+              </label>
+
+              <div class="body-tools">
+                <label class="upload-btn">
+                  <span>＋ 上传图片</span>
+                  <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden>
+                </label>
+                <span id="uploadStatus">支持 JPG / PNG / WebP / GIF / AVIF，单张不超过 5MB</span>
+              </div>
+
+              <p class="editor-note" id="editorStatus"></p>
+            </form>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel profile-panel" id="profilePanel" hidden>
+        <div class="panel-intro">
+          <p>保存后会写入内容文件；首页的姓名、标语和短句会读取这里。</p>
+        </div>
+        <form class="profile-form" id="profileForm">
+          <div class="field-row">
+            <label class="field">
+              <span>姓名</span>
+              <input id="profileNameInput" type="text">
+            </label>
+            <label class="field">
+              <span>邮箱</span>
+              <input id="profileEmailInput" type="email" placeholder="可选">
+            </label>
+          </div>
+          <label class="field">
+            <span>一句话标语</span>
+            <input id="profileTaglineInput" type="text" placeholder="新媒体 / 排版 / 用 AI 做点好玩的">
+          </label>
+          <label class="field">
+            <span>短句 / 简介</span>
+            <textarea id="profileIntroInput" rows="3" placeholder="一些代码、一些旅行、一些写下来的事。"></textarea>
+          </label>
+          <div class="field-row">
+            <label class="field">
+              <span>所在地</span>
+              <input id="profileLocationInput" type="text" placeholder="可选">
+            </label>
+            <label class="field">
+              <span>GitHub</span>
+              <input id="profileGithubInput" type="url" placeholder="https://github.com/...">
+            </label>
+          </div>
+          <label class="field">
+            <span>小红书</span>
+            <input id="profileXhsInput" type="text" placeholder="可选">
+          </label>
+          <div class="form-actions">
+            <button class="primary-btn small" type="submit">保存个人资料</button>
+            <span class="form-note">会提交到同一个内容文件。</span>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel settings-panel" id="settingsPanel" hidden>
+        <div class="panel-intro">
+          <p>仓库路径和登录状态。修改仓库设置后会重新读取内容。</p>
+        </div>
+        <form class="profile-form" id="settingsForm">
+          <div class="field-row">
+            <label class="field">
+              <span>仓库</span>
+              <input id="settingsRepoInput" type="text" placeholder="owner/repository">
+            </label>
+            <label class="field">
+              <span>分支</span>
+              <input id="settingsBranchInput" type="text" placeholder="main">
+            </label>
+          </div>
+          <div class="field-row">
+            <label class="field">
+              <span>站点根目录</span>
+              <input id="settingsSiteRootInput" type="text" placeholder="site">
+            </label>
+            <label class="field">
+              <span>内容文件</span>
+              <input id="settingsContentPathInput" type="text">
+            </label>
+          </div>
+          <label class="field">
+            <span>图片目录</span>
+            <input id="settingsMediaPathInput" type="text">
+          </label>
+          <div class="settings-note">
+            <strong>Token</strong>
+            <span id="tokenStatus">当前标签页已连接</span>
+            <button class="text-btn" id="changeTokenBtn" type="button">更换 Token</button>
+          </div>
+          <div class="form-actions">
+            <button class="primary-btn small" type="submit">保存设置并重新连接</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </section>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="js/admin.js?v=20261101a"></script>
+</body>
+</html>

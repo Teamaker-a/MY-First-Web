@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="carrot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffc47f"/>
+      <stop offset="1" stop-color="#f08a3c"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b7e77d"/>
+      <stop offset="1" stop-color="#65b84a"/>
+    </linearGradient>
+    <linearGradient id="suit" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e2f6ff"/>
+      <stop offset="1" stop-color="#a9d8ff"/>
+    </linearGradient>
+  </defs>
+
+  <!-- leaves -->
+  <path d="M100 62C82 48 60 20 70 10c12-10 26 20 30 40 4-22 18-46 30-38 12 8-6 38-22 52Z" fill="url(#leaf)" stroke="#241d1c" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M98 56C90 40 82 24 88 22c6-2 12 14 12 30M104 56c8-16 16-30 10-32-6-2-12 14-12 30" fill="none" stroke="#2d5d22" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- carrot head/body -->
+  <path d="M62 74q38-26 76 0 10 46-16 84-22 24-44 0Q52 120 62 74Z" fill="url(#carrot)" stroke="#241d1c" stroke-width="6" stroke-linejoin="round"/>
+  <ellipse cx="78" cy="88" rx="18" ry="10" fill="#ffffff" opacity=".28"/>
+
+  <!-- sleepy eyes -->
+  <path d="M62 108q0-12 18-12t18 12q-18 12-36 0Z" fill="#241d1c"/>
+  <path d="M102 108q0-12 18-12t18 12q-18 12-36 0Z" fill="#241d1c"/>
+  <circle cx="80" cy="108" r="4.5" fill="#ffffff"/>
+  <circle cx="120" cy="108" r="4.5" fill="#ffffff"/>
+  <path d="M62 96q18-6 36 0M102 96q18-6 36 0" fill="none" stroke="#241d1c" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- mouth + blush -->
+  <path d="M92 132q8 6 16 0" fill="none" stroke="#241d1c" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="52" cy="126" rx="9" ry="5" fill="#e9713d" opacity=".45"/>
+  <ellipse cx="148" cy="126" rx="9" ry="5" fill="#e9713d" opacity=".45"/>
+
+  <!-- body + paws -->
+  <path d="M46 168q54-22 108 0v28q-54 10-108 0Z" fill="url(#suit)" stroke="#241d1c" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M62 166q38 20 76 0" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+  <ellipse cx="48" cy="186" rx="18" ry="12" fill="#d9f1ff" stroke="#241d1c" stroke-width="6"/>
+  <ellipse cx="152" cy="186" rx="18" ry="12" fill="#d9f1ff" stroke="#241d1c" stroke-width="6"/>
+</svg>

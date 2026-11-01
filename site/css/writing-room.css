@@ -1,0 +1,995 @@
+:root {
+  --wine: #2a0e16;
+  --wine-deep: #150a10;
+  --wine-soft: #3a151d;
+  --room-gold: #d6b477;
+  --room-gold-bright: #edcf9a;
+  --room-cream: #f1e3d0;
+  --room-muted: #b49d8a;
+  --room-ink: #3d2427;
+}
+
+body.writing-page {
+  min-height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  color: var(--room-cream);
+  background: var(--wine-deep);
+  font-family: var(--sans);
+}
+
+body[data-page="article"] {
+  overflow: auto;
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(94, 48, 62, 0.22), transparent 60%),
+    #150a10;
+}
+
+/* --------------------------------------------------------------- navigation */
+
+.writing-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 40px;
+  background: linear-gradient(180deg, rgba(15, 8, 12, 0.55), transparent);
+}
+
+.writing-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--room-cream);
+  font-family: var(--serif);
+  font-size: 14px;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+}
+
+.writing-brand-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--room-gold);
+  box-shadow: 0 0 10px rgba(214, 180, 119, 0.7);
+}
+
+.writing-links {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  font-family: var(--serif);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+}
+
+.writing-links a {
+  position: relative;
+  padding: 4px 0;
+  color: rgba(241, 227, 208, 0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.writing-links a:hover,
+.writing-links a.active {
+  color: var(--room-cream);
+}
+
+.writing-links a.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--room-gold);
+  transform: translateX(-50%);
+}
+
+.writing-note {
+  color: rgba(241, 227, 208, 0.35);
+  font-family: var(--serif);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+}
+
+/* -------------------------------------------------------------------- room */
+
+.writing-room {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 680px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.room-wall {
+  position: absolute;
+  inset: -60px;
+  z-index: 0;
+  background-image: url("../assets/images/writing/blooming.jpg");
+  background-size: cover;
+  background-position: center;
+  filter: blur(17px) brightness(0.36) saturate(1.05);
+  transform: scale(1.08);
+  opacity: 0.62;
+}
+
+.room-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 44% 38% at 50% 44%, rgba(255, 206, 170, 0.12), transparent 65%),
+    radial-gradient(ellipse 40% 40% at 16% 30%, rgba(74, 30, 48, 0.25), transparent 70%),
+    linear-gradient(180deg, rgba(8, 4, 8, 0.55), transparent 22%, transparent 72%, rgba(8, 4, 8, 0.78));
+}
+
+.room-art {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  will-change: translate;
+  filter: drop-shadow(0 26px 45px rgba(0, 0, 0, 0.5));
+  animation: artIn 1.3s 0.1s both;
+}
+
+.room-art--left {
+  left: 2.4vw;
+  top: 9vh;
+  width: 25vw;
+  max-width: 385px;
+  transform: rotate(-2.4deg);
+}
+
+.room-art--right {
+  right: 2.4vw;
+  top: 13vh;
+  width: 26vw;
+  max-width: 400px;
+  transform: rotate(2deg);
+}
+
+.room-frame {
+  padding: 9px;
+  border: 1px solid rgba(35, 18, 14, 0.9);
+  background: linear-gradient(135deg, #6d4c28, #ecd29f 32%, #9a7440 58%, #5d3f1f);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 241, 204, 0.48),
+    inset 0 0 0 4px rgba(76, 44, 26, 0.55);
+}
+
+.room-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: saturate(0.92) contrast(1.03);
+}
+
+@keyframes artIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.room-copy {
+  position: absolute;
+  left: 5.5vw;
+  top: 42%;
+  z-index: 5;
+  width: 27vw;
+  max-width: 360px;
+  will-change: translate;
+  animation: copyIn 1.2s 0.32s both;
+}
+
+@keyframes copyIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.room-kicker {
+  margin: 0;
+  color: var(--room-gold);
+  font-family: var(--serif);
+  font-size: 9.5px;
+  letter-spacing: 0.34em;
+}
+
+.room-title {
+  margin: 12px 0 12px;
+  color: var(--room-cream);
+  font-family: "WenKai", "Songti SC", "Noto Serif SC", Georgia, serif;
+  font-size: clamp(62px, 7.2vw, 108px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  text-shadow:
+    0 0 22px rgba(214, 180, 119, 0.2),
+    0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.room-sub {
+  margin: 0;
+  color: rgba(237, 207, 154, 0.9);
+  font-family: "WenKai", var(--serif);
+  font-size: 15px;
+  letter-spacing: 0.12em;
+}
+
+.room-desc {
+  max-width: 27em;
+  margin: 24px 0 0;
+  padding-left: 16px;
+  border-left: 1px solid rgba(214, 180, 119, 0.28);
+  color: rgba(241, 227, 208, 0.55);
+  font-family: var(--serif);
+  font-size: 12.5px;
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+
+.room-desk {
+  position: absolute;
+  left: -4%;
+  right: -4%;
+  bottom: -2%;
+  z-index: 1;
+  height: 25%;
+  border-top: 1px solid rgba(214, 180, 119, 0.4);
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(233, 190, 134, 0.16), transparent 65%),
+    linear-gradient(180deg, #46221d 0%, #281310 42%, #120a09 100%);
+  box-shadow: 0 -24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.room-lace {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 3%;
+  z-index: 2;
+  height: 180px;
+  pointer-events: none;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    ellipse at 50% 50%,
+    transparent 0 13px,
+    rgba(214, 180, 119, 0.075) 14px 15px,
+    transparent 16px 25px
+  );
+  opacity: 0.55;
+  filter: blur(0.4px);
+}
+
+/* ------------------------------------------------------------------ letters */
+
+.room-letters {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.letter-card {
+  position: absolute;
+  pointer-events: auto;
+  text-decoration: none;
+  color: inherit;
+  transform: rotate(var(--rot, 0deg));
+  transform-origin: 50% 58%;
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 0.35s;
+  will-change: transform, translate;
+  filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.45));
+}
+
+.letter-card--1 {
+  left: 35%;
+  top: 21%;
+  z-index: 4;
+  width: 250px;
+  height: 420px;
+}
+
+.letter-card--2 {
+  left: 53%;
+  top: 16%;
+  z-index: 5;
+  width: 272px;
+  height: 450px;
+}
+
+.letter-card--3 {
+  left: 70.5%;
+  top: 23%;
+  z-index: 3;
+  width: 246px;
+  height: 405px;
+}
+
+.letter-card:hover,
+.letter-card:focus-visible {
+  z-index: 20;
+  transform: rotate(0deg) translateY(-18px) scale(1.025);
+  filter: drop-shadow(0 34px 40px rgba(0, 0, 0, 0.55)) brightness(1.05);
+  outline: none;
+}
+
+.letter-card:focus-visible .letter-paper {
+  box-shadow:
+    0 0 0 1px var(--room-gold),
+    0 0 0 6px rgba(214, 180, 119, 0.18),
+    0 26px 50px rgba(0, 0, 0, 0.5);
+}
+
+.letter-paper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #f8ebe6;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(95, 55, 48, 0.28);
+  box-shadow:
+    0 24px 45px rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+  animation: letterIn 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes letterIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px) rotate(-1.5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+.letter-paper--butterfly {
+  background-image: url("../assets/images/writing/letter-butterfly.jpg");
+}
+
+.letter-paper--blossom {
+  background-image: url("../assets/images/writing/letter-blossom.jpg");
+}
+
+.letter-paper--third {
+  background-image:
+    linear-gradient(rgba(116, 38, 52, 0.1), rgba(255, 234, 224, 0.16)),
+    url("../assets/images/writing/letter-butterfly.jpg");
+  background-position: 30% 45%;
+}
+
+.letter-content {
+  position: absolute;
+  left: 20%;
+  right: 18%;
+  top: 19%;
+  bottom: 14%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  padding: 9px 9px 8px;
+  border-radius: 1px;
+  background: linear-gradient(180deg, rgba(255, 250, 244, 0.68), rgba(255, 246, 239, 0.52));
+  box-shadow: 0 0 0 1px rgba(150, 98, 82, 0.08);
+  color: var(--room-ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.letter-meta {
+  margin: 0;
+  color: #8a5a56;
+  font-family: var(--serif);
+  font-size: 8.5px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.letter-meta span {
+  color: #b0895a;
+}
+
+.letter-content h2 {
+  margin: 9px 0 8px;
+  color: #4b2028;
+  font-family: "WenKai", "Songti SC", "Noto Serif SC", serif;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+}
+
+.letter-excerpt {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: #6b4a46;
+  font-family: var(--serif);
+  font-size: 9.5px;
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+}
+
+.letter-cta {
+  align-self: flex-start;
+  margin-top: auto;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(122, 57, 69, 0.35);
+  color: #7a3945;
+  font-family: var(--serif);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+}
+
+.letter-wax {
+  position: absolute;
+  right: 11%;
+  bottom: 9%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, #a73a45, #5a111c 72%);
+  box-shadow:
+    0 0 0 2px rgba(214, 180, 119, 0.5),
+    0 8px 16px rgba(0, 0, 0, 0.35),
+    inset 0 2px 4px rgba(255, 190, 180, 0.35);
+  color: rgba(237, 207, 154, 0.9);
+  font-family: var(--serif);
+  font-size: 14px;
+  transform: rotate(-8deg);
+  transition: box-shadow 0.3s;
+}
+
+.letter-card:hover .letter-wax {
+  box-shadow:
+    0 0 0 2px rgba(237, 207, 154, 0.8),
+    0 0 18px rgba(214, 180, 119, 0.4),
+    0 8px 16px rgba(0, 0, 0, 0.35);
+}
+
+.letter-empty {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--room-muted);
+  font-family: var(--serif);
+}
+
+/* --------------------------------------------------------------- foreground */
+
+.room-foreground {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+}
+
+.fg-pen {
+  position: absolute;
+  left: 30%;
+  bottom: 12%;
+  width: 210px;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #2b1913, #7b5a2e 28%, #e6c98d 54%, #2b1913 88%);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.35);
+  transform: rotate(-33deg);
+  will-change: translate;
+}
+
+.fg-pen::before {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 1px;
+  width: 28px;
+  height: 10px;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  background: linear-gradient(90deg, #c39a55, #f0d7a2);
+}
+
+.fg-pen::after {
+  content: "";
+  position: absolute;
+  right: 52px;
+  top: 1px;
+  width: 4px;
+  height: 10px;
+  background: #d8b679;
+}
+
+.fg-seal {
+  position: absolute;
+  right: 23%;
+  bottom: 14%;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, #a73a45, #55101a 72%);
+  box-shadow:
+    0 0 0 3px rgba(214, 180, 119, 0.35),
+    0 14px 22px rgba(0, 0, 0, 0.4);
+  color: rgba(237, 207, 154, 0.9);
+  font-family: var(--serif);
+  font-size: 19px;
+  will-change: translate;
+}
+
+.fg-seal::before,
+.fg-seal::after {
+  content: "";
+  position: absolute;
+  top: -22px;
+  width: 12px;
+  height: 28px;
+  background: linear-gradient(180deg, #7d2732, #4e111b);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 76%, 0 100%);
+  opacity: 0.8;
+}
+
+.fg-seal::before {
+  left: 12px;
+  transform: rotate(-9deg);
+}
+
+.fg-seal::after {
+  right: 12px;
+  transform: rotate(9deg);
+}
+
+.fg-butterfly {
+  position: absolute;
+  right: 17%;
+  top: 26%;
+  width: 92px;
+  opacity: 0.88;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.25));
+  animation: butterflyFloat 9s ease-in-out infinite;
+  will-change: translate;
+}
+
+.fg-butterfly svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@keyframes butterflyFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(3deg);
+  }
+}
+
+.room-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  z-index: 9;
+  margin: 0;
+  transform: translateX(-50%);
+  color: rgba(214, 180, 119, 0.55);
+  font-family: var(--serif);
+  font-size: 8.5px;
+  letter-spacing: 0.28em;
+  white-space: nowrap;
+}
+
+.room-hint::before {
+  content: "";
+  display: block;
+  width: 46px;
+  height: 1px;
+  margin: 0 auto 9px;
+  background: rgba(214, 180, 119, 0.35);
+}
+
+/* ------------------------------------------------------------- article page */
+
+.letter-page {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  padding: 108px 20px 70px;
+}
+
+.letter-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url("../assets/images/writing/blooming.jpg");
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px) brightness(0.24) saturate(0.95);
+  opacity: 0.7;
+}
+
+.letter-back {
+  display: block;
+  width: min(780px, 94vw);
+  margin: 0 auto 20px;
+  color: rgba(214, 180, 119, 0.7);
+  font-family: var(--serif);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+}
+
+.letter-back:hover {
+  color: var(--room-cream);
+}
+
+.letter-article {
+  position: relative;
+  width: min(780px, 94vw);
+  margin: 0 auto;
+  padding: 58px 68px 76px;
+  border: 1px solid rgba(214, 180, 119, 0.5);
+  background-color: #fbf3eb;
+  background-image:
+    linear-gradient(rgba(255, 249, 243, 0.9), rgba(255, 248, 241, 0.95)),
+    url("../assets/images/writing/letter-butterfly.jpg");
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.7),
+    inset 0 0 0 8px rgba(214, 180, 119, 0.1);
+  color: #3d2a26;
+  overflow: hidden;
+}
+
+.letter-article::before,
+.letter-article::after {
+  content: "";
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: radial-gradient(rgba(150, 98, 82, 0.3) 1px, transparent 1.2px);
+  background-size: 8px 8px;
+}
+
+.letter-article::before {
+  left: 16px;
+  top: 16px;
+  mask-image: radial-gradient(circle at 0 0, #000 0 55%, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle at 0 0, #000 0 55%, transparent 72%);
+}
+
+.letter-article::after {
+  right: 16px;
+  bottom: 16px;
+  mask-image: radial-gradient(circle at 100% 100%, #000 0 55%, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle at 100% 100%, #000 0 55%, transparent 72%);
+}
+
+.letter-head {
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(150, 98, 82, 0.32);
+  text-align: center;
+}
+
+.letter-head .eyebrow {
+  margin: 0 0 16px;
+  color: #9a6a4c;
+  font-size: 9.5px;
+  letter-spacing: 0.3em;
+}
+
+.letter-head h1 {
+  margin: 0 0 14px;
+  color: #46202a;
+  font-family: "WenKai", "Songti SC", "Noto Serif SC", serif;
+  font-size: clamp(38px, 5vw, 58px);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+}
+
+.letter-head .letter-meta {
+  color: #8b6256;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+.letter-body {
+  padding-top: 34px;
+}
+
+.letter-body p {
+  margin: 0 0 1.55em;
+  color: #44302b;
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 2.05;
+  letter-spacing: 0.01em;
+}
+
+.letter-body p:first-child::first-letter {
+  color: #8a3546;
+}
+
+.letter-sign {
+  margin-top: 40px;
+  color: #7b4a46;
+  font-family: "WenKai", var(--serif);
+  font-size: 17px;
+  text-align: right;
+  letter-spacing: 0.1em;
+}
+
+.letter-article .letter-wax {
+  right: 38px;
+  bottom: 32px;
+}
+
+/* ------------------------------------------------------------------ tablet */
+
+@media (max-width: 1180px) {
+  .room-art--left {
+    width: 23vw;
+  }
+
+  .room-art--right {
+    width: 24vw;
+  }
+
+  .room-copy {
+    width: 31vw;
+  }
+
+  .room-title {
+    font-size: clamp(56px, 7vw, 88px);
+  }
+
+  .letter-card--1 {
+    left: 35%;
+    width: 250px;
+    height: 415px;
+  }
+
+  .letter-card--2 {
+    left: 53%;
+    width: 272px;
+    height: 450px;
+  }
+
+  .letter-card--3 {
+    left: 71%;
+    width: 240px;
+    height: 400px;
+  }
+
+  .letter-content {
+    left: 19%;
+    right: 17%;
+  }
+
+  .letter-content h2 {
+    font-size: 19px;
+  }
+
+  .letter-excerpt {
+    font-size: 9.5px;
+  }
+}
+
+/* ------------------------------------------------------------------ mobile */
+
+@media (max-width: 900px) {
+  body.writing-page {
+    overflow: auto;
+  }
+
+  .writing-nav {
+    padding: 16px 18px;
+    gap: 10px;
+  }
+
+  .writing-brand {
+    font-size: 12px;
+  }
+
+  .writing-links {
+    gap: 13px;
+    font-size: 10.5px;
+  }
+
+  .writing-note {
+    display: none;
+  }
+
+  .writing-room {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+    padding: 96px 18px 54px;
+  }
+
+  .room-art {
+    display: none;
+  }
+
+  .room-wall {
+    position: fixed;
+    opacity: 0.5;
+  }
+
+  .room-vignette {
+    position: fixed;
+    background:
+      radial-gradient(ellipse 70% 40% at 50% 18%, rgba(255, 206, 170, 0.1), transparent 70%),
+      linear-gradient(180deg, rgba(8, 4, 8, 0.4), transparent 26%, rgba(8, 4, 8, 0.5) 78%);
+  }
+
+  .room-copy {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto 34px;
+    text-align: center;
+  }
+
+  .room-title {
+    font-size: clamp(48px, 14vw, 64px);
+  }
+
+  .room-sub {
+    font-size: 13px;
+  }
+
+  .room-desc {
+    max-width: 23em;
+    margin: 18px auto 0;
+    padding-left: 0;
+    border-left: 0;
+    font-size: 11.5px;
+    line-height: 1.9;
+  }
+
+  .room-desk,
+  .room-lace,
+  .room-foreground {
+    display: none;
+  }
+
+  .room-letters {
+    position: relative;
+    inset: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+    width: 100%;
+    pointer-events: auto;
+  }
+
+  .letter-card {
+    position: relative;
+    left: auto !important;
+    top: auto !important;
+    width: min(340px, 88vw);
+    height: 520px;
+    transform: none;
+    filter: drop-shadow(0 20px 26px rgba(0, 0, 0, 0.42));
+  }
+
+  .letter-card:hover,
+  .letter-card:focus-visible {
+    transform: translateY(-6px);
+  }
+
+  .letter-content {
+    left: 19%;
+    right: 17%;
+    top: 18%;
+    bottom: 13%;
+  }
+
+  .letter-content h2 {
+    font-size: 23px;
+  }
+
+  .letter-excerpt {
+    font-size: 11px;
+    -webkit-line-clamp: 6;
+  }
+
+  .room-hint {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    margin-top: 30px;
+    text-align: center;
+    font-size: 8px;
+  }
+
+  .letter-page {
+    padding: 92px 14px 44px;
+  }
+
+  .letter-back {
+    width: 100%;
+    margin-bottom: 14px;
+    font-size: 9px;
+  }
+
+  .letter-article {
+    width: 100%;
+    padding: 34px 24px 52px;
+  }
+
+  .letter-head {
+    padding-bottom: 22px;
+  }
+
+  .letter-head h1 {
+    font-size: 34px;
+  }
+
+  .letter-body {
+    padding-top: 24px;
+  }
+
+  .letter-body p {
+    font-size: 15px;
+    line-height: 1.95;
+  }
+
+  .letter-article .letter-wax {
+    right: 24px;
+    bottom: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-art,
+  .room-copy,
+  .letter-paper,
+  .fg-butterfly {
+    animation: none !important;
+  }
+}

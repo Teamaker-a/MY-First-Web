@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>旅行地图 · 沈旭斐</title>
+  <script>
+    try {
+      if (sessionStorage.getItem('travelIntroSeen') === '1') {
+        document.documentElement.classList.add('skip-travel-intro');
+      }
+    } catch (error) {}
+  </script>
+  <link rel="stylesheet" href="css/base.css?v=20261020b">
+  <link rel="stylesheet" href="css/fonts.css?v=20261020b">
+  <link rel="stylesheet" href="css/travel.css?v=20261023d">
+  <link rel="stylesheet" href="css/carousel-skin.css?v=20261023c">
+  <link rel="stylesheet" href="css/intro.css?v=20261023c">
+</head>
+<body class="travel-page">
+  <section class="travel-intro" id="travelIntro" aria-label="旅行体验开场">
+    <div class="intro-pattern" aria-hidden="true"></div>
+    <div class="intro-dust" id="introDust" aria-hidden="true"></div>
+    <div class="intro-brand">沈旭斐 <span>·</span> TRAVEL LOG</div>
+    <button class="intro-skip" id="introSkip" type="button">SKIP</button>
+    <div class="intro-center">
+      <p class="intro-kicker">SHEN XUFEI PRESENTS</p>
+      <h1 class="intro-title">去有风的地方</h1>
+      <p class="intro-sub">把走过的地方，收进一颗星球。</p>
+      <button class="intro-enter" id="introEnter" type="button">
+        <span>进入</span>
+        <span class="intro-enter-arrow">↗</span>
+      </button>
+      <button class="intro-sound" id="introSound" type="button" aria-pressed="false">
+        <span class="intro-sound-dot"></span>
+        <span class="intro-sound-label">SOUND ON</span>
+      </button>
+    </div>
+  </section>
+
+  <canvas id="globe-canvas" aria-hidden="true"></canvas>
+  <canvas id="globe-canvas-2d" aria-hidden="true" hidden></canvas>
+  <div class="sky-glow" aria-hidden="true"></div>
+
+  <header class="travel-nav">
+    <a class="nav-brand" href="index.html">
+      <span class="brand-dot"></span>
+      沈旭斐
+    </a>
+    <nav class="nav-links" aria-label="主导航">
+      <a href="works.html">作品</a>
+      <a href="travel.html" class="active">旅行</a>
+      <a href="writing.html">文章</a>
+    </nav>
+    <button class="sound-toggle" id="soundToggle" aria-pressed="false" title="背景音乐（示例音乐，可替换）">
+      <span class="sound-icon">♪</span>
+      <span class="sound-label">音乐</span>
+    </button>
+  </header>
+
+  <main>
+    <section class="globe-stage" id="globeStage">
+      <div class="globe-copy">
+        <p class="eyebrow">TRAVEL LOG · 旅行地图</p>
+        <h1 class="globe-title">把走过的地方，<br>收进一颗星球</h1>
+        <p class="globe-sub">拖动地球看看，点一下，降落到中国。去过的地方会亮成粉色，最想去的地方是蓝色。</p>
+        <button class="enter-btn" id="enterBtn">
+          <span>点击地球开始</span>
+          <span class="enter-arrow">↘</span>
+        </button>
+      </div>
+      <div class="globe-hint" aria-hidden="true">
+        <span>拖动旋转</span>
+        <span class="hint-dot"></span>
+        <span>滚轮缩放</span>
+        <span class="hint-dot"></span>
+        <span>点击降落</span>
+      </div>
+    </section>
+
+    <section class="map-stage" id="mapStage" hidden>
+      <div class="map-head">
+        <button class="back-btn" id="backToGlobe">← 回到地球</button>
+        <div class="map-title-wrap">
+          <p class="eyebrow">CHINA · 我的足迹</p>
+          <h2>降落在中国</h2>
+        </div>
+        <div class="map-stats">
+          <span><strong id="visitedCount">0</strong> 个去过</span>
+          <span><strong id="wishCount">0</strong> 个愿望</span>
+        </div>
+      </div>
+
+      <div class="map-canvas-wrap">
+        <svg id="chinaMap" viewBox="0 0 1000 580" role="img" aria-label="中国旅行地图"></svg>
+        <div class="map-tooltip" id="mapTooltip" hidden></div>
+      </div>
+
+      <div class="map-places" id="mapPlaces" aria-label="去过的省份"></div>
+
+      <div class="map-legend">
+        <span class="legend-item"><i class="swatch visited"></i>去过</span>
+        <span class="legend-item"><i class="swatch wishlist"></i>最想去</span>
+        <span class="legend-item"><i class="swatch neutral"></i>还没点亮</span>
+        <span class="demo-chip" id="demoChip" hidden>示例数据 · 待替换</span>
+      </div>
+      <p class="map-hint">点击粉色或蓝色省份，翻开旅行照片</p>
+    </section>
+  </main>
+
+  <section class="place-overlay" id="placeOverlay" hidden aria-modal="true" role="dialog" aria-labelledby="placeTitle">
+    <div class="place-backdrop" id="placeBackdrop">
+      <span class="sky-cloud cloud-1" aria-hidden="true"></span>
+      <span class="sky-cloud cloud-2" aria-hidden="true"></span>
+      <span class="sky-star star-1" aria-hidden="true"></span>
+      <span class="sky-star star-2" aria-hidden="true"></span>
+      <span class="sky-star star-3" aria-hidden="true"></span>
+      <span class="sky-star star-4" aria-hidden="true"></span>
+      <span class="sky-star star-5" aria-hidden="true"></span>
+      <span class="sky-star star-6" aria-hidden="true"></span>
+    </div>
+    <button class="place-close" id="placeClose" aria-label="关闭">×</button>
+    <button class="place-music" id="placeMusic" aria-label="背景音乐" aria-pressed="false">♪</button>
+    <div class="place-content">
+      <header class="place-head">
+        <p class="eyebrow" id="placeEyebrow">DESTINATION</p>
+        <h2 id="placeTitle">江南的雨</h2>
+        <p class="place-subtitle" id="placeSubtitle">杭州 · 乌镇 · 2025 春</p>
+        <p class="place-note" id="placeNote"></p>
+      </header>
+
+      <div class="carousel-toolbar" role="group" aria-label="旋转木马控制">
+        <button class="comic-chip" id="carouselWind">起风</button>
+        <button class="comic-chip" id="carouselSpin">暂停旋转</button>
+        <button class="comic-chip" id="carouselMode" aria-pressed="false">☾ 夜晚</button>
+      </div>
+
+      <div class="carousel-shell">
+        <div class="carousel-glow" aria-hidden="true"></div>
+        <div class="sparkle-field" id="sparkleField" aria-hidden="true"></div>
+        <div class="carousel-3d" id="carousel3d" aria-hidden="true"></div>
+        <div class="carousel-column" aria-hidden="true"><span class="carousel-lamp"></span></div>
+        <div class="carousel-canopy" aria-hidden="true"></div>
+        <div class="carousel-stage" id="carouselStage">
+          <div class="carousel-ring" id="carouselRing"></div>
+          <div class="carousel-base" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="carousel-controls">
+        <button class="round-btn" id="carouselPrev" aria-label="上一张">←</button>
+        <span class="carousel-count" id="carouselCount">1 / 6</span>
+        <button class="round-btn" id="carouselNext" aria-label="下一张">→</button>
+      </div>
+
+      <p class="carousel-credit">
+        木马贴图与结构：<a href="https://github.com/Daria1216/carousel-lamp" target="_blank" rel="noreferrer">Carousel Lamp</a>
+        by 咕噜蛋Daria · 非商业使用
+      </p>
+    </div>
+  </section>
+
+  <div class="photo-modal" id="photoModal" hidden>
+    <button class="photo-modal-close" id="photoModalClose" aria-label="关闭">×</button>
+    <figure>
+      <div id="photoModalMedia"></div>
+      <figcaption id="photoModalCaption"></figcaption>
+    </figure>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="vendor/gsap.min.js"></script>
+  <script type="module" src="js/travel.js"></script>
+</body>
+</html>

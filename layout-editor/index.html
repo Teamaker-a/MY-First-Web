@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>排版编辑器 · 个人网站</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">版</span>
+      <span>排版编辑器</span>
+    </div>
+    <div class="page-tabs" id="pageTabs" aria-label="页面"></div>
+    <div class="top-actions">
+      <button class="btn ghost" id="btnAddPage" title="新建页面">+ 页面</button>
+      <button class="btn ghost" id="btnImport" title="导入项目 JSON">导入</button>
+      <button class="btn ghost" id="btnExport" title="导出项目 JSON（含素材）">导出</button>
+      <button class="btn primary" id="btnPreview" title="全屏预览">预览</button>
+      <span class="save-status" id="saveStatus">已保存</span>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="panel assets-panel">
+      <div class="panel-head">
+        <h2>美术资产库</h2>
+        <span class="count" id="assetCount">0</span>
+      </div>
+      <label class="upload" for="fileInput">
+        <input type="file" id="fileInput" accept="image/*" multiple hidden>
+        <span class="upload-icon">＋</span>
+        上传透明图片
+      </label>
+      <p class="hint">上传后点击素材加入画布</p>
+      <div class="asset-grid" id="assetGrid"></div>
+    </aside>
+
+    <section class="canvas-wrap">
+      <div class="canvas-toolbar">
+        <div class="tool-group">
+          <button class="btn icon" id="btnUndo" title="撤销 Ctrl+Z" aria-label="撤销">↶</button>
+          <button class="btn icon" id="btnRedo" title="重做 Ctrl+Shift+Z" aria-label="重做">↷</button>
+        </div>
+        <div class="tool-group">
+          <button class="btn ghost" id="btnAddText">＋ 文字</button>
+        </div>
+        <span class="zoom-label" id="zoomLabel">100%</span>
+      </div>
+      <div class="stage-scroll" id="stageScroll">
+        <div class="stage-sizer" id="stageSizer">
+          <div class="stage" id="stage">
+            <div class="page" id="page"></div>
+          </div>
+        </div>
+      </div>
+      <p class="canvas-hint">拖动物体调整位置 · 四角缩放 · 上方圆点旋转 · 方向键微调 · Shift 加速</p>
+    </section>
+
+    <aside class="panel inspector">
+      <div class="panel-head">
+        <h2>图层</h2>
+        <span class="count">从上到下</span>
+      </div>
+      <div class="layer-list" id="layerList"></div>
+      <div class="props" id="props"></div>
+    </aside>
+  </main>
+
+  <div class="preview-bar hidden" id="previewBar">
+    <button class="btn ghost" id="btnPrevPage" aria-label="上一页">←</button>
+    <span class="preview-page-name" id="previewPageName">首页</span>
+    <button class="btn ghost" id="btnNextPage" aria-label="下一页">→</button>
+    <button class="btn primary" id="btnExitPreview">退出预览</button>
+  </div>
+
+  <input type="file" id="importInput" accept="application/json,.json" hidden>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <g stroke="#a88b78" stroke-opacity=".42" stroke-width="1">
+    <circle cx="200" cy="200" r="186" stroke-dasharray="2 9"/>
+    <circle cx="200" cy="200" r="168" stroke-dasharray="1 5"/>
+    <circle cx="200" cy="200" r="142" stroke-dasharray="4 8"/>
+    <circle cx="200" cy="200" r="118"/>
+    <circle cx="200" cy="200" r="94" stroke-dasharray="2 6"/>
+    <g opacity=".7">
+      <circle cx="370" cy="200" r="13"/><circle cx="357" cy="265" r="13"/><circle cx="320" cy="320" r="13"/><circle cx="265" cy="357" r="13"/>
+      <circle cx="200" cy="370" r="13"/><circle cx="135" cy="357" r="13"/><circle cx="80" cy="320" r="13"/><circle cx="43" cy="265" r="13"/>
+      <circle cx="30" cy="200" r="13"/><circle cx="43" cy="135" r="13"/><circle cx="80" cy="80" r="13"/><circle cx="135" cy="43" r="13"/>
+      <circle cx="200" cy="30" r="13"/><circle cx="265" cy="43" r="13"/><circle cx="320" cy="80" r="13"/><circle cx="357" cy="135" r="13"/>
+    </g>
+    <g opacity=".5">
+      <path d="M200 84c26 28 26 56 0 84-26-28-26-56 0-84Z"/>
+      <path d="M200 232c26 28 26 56 0 84-26-28-26-56 0-84Z"/>
+      <path d="M84 200c28-26 56-26 84 0-28 26-56 26-84 0Z"/>
+      <path d="M232 200c28-26 56-26 84 0-28 26-56 26-84 0Z"/>
+    </g>
+  </g>
+</svg>

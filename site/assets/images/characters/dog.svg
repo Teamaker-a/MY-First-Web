@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="fur" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d9a477"/>
+      <stop offset="1" stop-color="#b77345"/>
+    </linearGradient>
+    <linearGradient id="ear" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a9663f"/>
+      <stop offset="1" stop-color="#7f4729"/>
+    </linearGradient>
+    <linearGradient id="suit" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e2f6ff"/>
+      <stop offset="1" stop-color="#a9d8ff"/>
+    </linearGradient>
+  </defs>
+
+  <!-- floppy ears -->
+  <path d="M58 88C34 84 22 108 30 150c6 30 28 32 40 8 8-16 6-50 2-66Z" fill="url(#ear)" stroke="#241d1c" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M142 88c24-4 36 20 28 62-6 30-28 32-40 8-8-16-6-50-2-66Z" fill="url(#ear)" stroke="#241d1c" stroke-width="6" stroke-linejoin="round"/>
+
+  <!-- head -->
+  <ellipse cx="100" cy="108" rx="58" ry="50" fill="url(#fur)" stroke="#241d1c" stroke-width="6"/>
+  <ellipse cx="82" cy="84" rx="22" ry="12" fill="#ffffff" opacity=".2"/>
+
+  <!-- white blaze -->
+  <path d="M86 60q14-8 28 0l-7 92q-7 8-14 0Z" fill="#fff5e8"/>
+
+  <!-- sleepy eyes -->
+  <path d="M58 108q0-14 17-14t17 14q-17 13-34 0Z" fill="#241d1c"/>
+  <path d="M108 108q0-14 17-14t17 14q-17 13-34 0Z" fill="#241d1c"/>
+  <circle cx="82" cy="108" r="5" fill="#ffffff"/>
+  <circle cx="118" cy="108" r="5" fill="#ffffff"/>
+  <path d="M58 96q17-7 34 0M108 96q17-7 34 0" fill="none" stroke="#241d1c" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- muzzle -->
+  <ellipse cx="100" cy="134" rx="29" ry="19" fill="#fff5e8" stroke="#241d1c" stroke-width="5"/>
+  <ellipse cx="100" cy="128" rx="9" ry="6" fill="#241d1c"/>
+  <path d="M100 134q0 9-8 11M100 134q0 9 8 11" fill="none" stroke="#241d1c" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="52" cy="132" rx="10" ry="5" fill="#e07d6f" opacity=".45"/>
+  <ellipse cx="148" cy="132" rx="10" ry="5" fill="#e07d6f" opacity=".45"/>
+
+  <!-- body + paws -->
+  <path d="M46 168q54-22 108 0v28q-54 10-108 0Z" fill="url(#suit)" stroke="#241d1c" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M62 166q38 20 76 0" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+  <ellipse cx="48" cy="186" rx="18" ry="12" fill="#d9f1ff" stroke="#241d1c" stroke-width="6"/>
+  <ellipse cx="152" cy="186" rx="18" ry="12" fill="#d9f1ff" stroke="#241d1c" stroke-width="6"/>
+</svg>

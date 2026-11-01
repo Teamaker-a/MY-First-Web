@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 620" fill="none">
+  <defs>
+    <linearGradient id="petal" x1="-12" y1="-30" x2="12" y2="2" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f1ddd7"/>
+      <stop offset=".6" stop-color="#e4c4c0"/>
+      <stop offset="1" stop-color="#cda3a2"/>
+    </linearGradient>
+    <linearGradient id="bud" x1="0" y1="-8" x2="0" y2="14" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d9b2af"/>
+      <stop offset="1" stop-color="#b38487"/>
+    </linearGradient>
+    <g id="flower">
+      <g fill="url(#petal)" stroke="#ad8582" stroke-opacity=".55" stroke-width=".9">
+        <ellipse cx="0" cy="-13" rx="8.5" ry="13"/>
+        <ellipse cx="0" cy="-13" rx="8.5" ry="13" transform="rotate(72)"/>
+        <ellipse cx="0" cy="-13" rx="8.5" ry="13" transform="rotate(144)"/>
+        <ellipse cx="0" cy="-13" rx="8.5" ry="13" transform="rotate(216)"/>
+        <ellipse cx="0" cy="-13" rx="8.5" ry="13" transform="rotate(288)"/>
+      </g>
+      <circle r="4" fill="#b99071" opacity=".7"/>
+      <circle r="1.4" fill="#8c6a54" opacity=".6"/>
+    </g>
+    <g id="leaf">
+      <path d="M0 0C12-14 30-16 42-6 30 8 12 8 0 0Z" fill="#aeb4a1" stroke="#8f9888" stroke-opacity=".5" stroke-width=".9"/>
+      <path d="M2 0C15-4 28-6 39-5" stroke="#8f9888" stroke-opacity=".35" stroke-width=".8"/>
+    </g>
+    <g id="bud">
+      <path d="M0 0C-9-8-8-20 0-26 8-20 9-8 0 0Z" fill="url(#bud)" stroke="#a97d7c" stroke-opacity=".5" stroke-width=".9"/>
+      <path d="M-4 1c0 8 1 14 4 20" stroke="#947a63" stroke-width="1.4" stroke-linecap="round"/>
+    </g>
+  </defs>
+
+  <g stroke="#8f7863" stroke-width="2.1" stroke-linecap="round" opacity=".9">
+    <path d="M34 588C96 520 92 438 146 372 190 316 252 292 296 224 330 172 340 120 334 62"/>
+    <path d="M146 372c-30-30-52-64-62-104"/>
+    <path d="M210 320c22 26 42 46 76 56"/>
+    <path d="M282 246c-26-4-48-14-64-32"/>
+    <path d="M318 132c18 10 36 16 58 18"/>
+  </g>
+
+  <g opacity=".92">
+    <use href="#leaf" transform="translate(82 462) rotate(-32) scale(.9)"/>
+    <use href="#leaf" transform="translate(96 424) rotate(28) scale(.78)"/>
+    <use href="#leaf" transform="translate(124 340) rotate(-40) scale(.86)"/>
+    <use href="#leaf" transform="translate(210 328) rotate(24) scale(.75)"/>
+    <use href="#leaf" transform="translate(268 272) rotate(-26) scale(.8)"/>
+    <use href="#leaf" transform="translate(300 194) rotate(30) scale(.7)"/>
+    <use href="#leaf" transform="translate(324 106) rotate(-18) scale(.62)"/>
+  </g>
+
+  <g>
+    <use href="#flower" transform="translate(150 370) scale(1.2) rotate(14)"/>
+    <use href="#flower" transform="translate(214 318) scale(.86) rotate(-38)"/>
+    <use href="#flower" transform="translate(286 246) scale(1.05) rotate(36)"/>
+    <use href="#flower" transform="translate(330 132) scale(.8) rotate(-16)"/>
+  </g>
+
+  <g opacity=".8">
+    <use href="#bud" transform="translate(72 510) rotate(-24)"/>
+    <use href="#bud" transform="translate(112 312) rotate(18) scale(.85)"/>
+    <use href="#bud" transform="translate(372 94) rotate(12) scale(.8)"/>
+  </g>
+
+  <g fill="#cda3a2" opacity=".5">
+    <circle cx="180" cy="286" r="2.2"/>
+    <circle cx="250" cy="360" r="1.6"/>
+    <circle cx="312" cy="204" r="1.8"/>
+    <circle cx="122" cy="430" r="1.4"/>
+  </g>
+</svg>
