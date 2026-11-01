@@ -1,4 +1,4 @@
-import { site as fallbackProfile, articles as fallbackArticles } from './data.js?v=20261029a';
+import { site as fallbackProfile, articles as fallbackArticles, travel as fallbackTravel } from './data.js?v=20261029a';
 
 const CONTENT_URL = new URL('../content/site.json', import.meta.url);
 
@@ -22,10 +22,46 @@ function normalizeArticles(list) {
   }));
 }
 
+function normalizePhoto(photo, index) {
+  if (!photo || typeof photo !== 'object') {
+    return { src: '', caption: `第 ${index + 1} 张` };
+  }
+  return {
+    ...photo,
+    src: String(photo.src || ''),
+    caption: String(photo.caption || `第 ${index + 1} 张`),
+  };
+}
+
+function normalizeTravel(source) {
+  const raw = source && typeof source === 'object' ? source : fallbackTravel;
+  const places = {};
+  Object.entries(raw.places || {}).forEach(([name, place]) => {
+    if (!place || typeof place !== 'object') return;
+    places[name] = {
+      ...place,
+      title: String(place.title || ''),
+      subtitle: String(place.subtitle || ''),
+      note: String(place.note || ''),
+      wish: Boolean(place.wish),
+      photos: Array.isArray(place.photos)
+        ? place.photos.map(normalizePhoto)
+        : [],
+    };
+  });
+  return {
+    demo: Boolean(raw.demo),
+    visited: Array.isArray(raw.visited) ? raw.visited.map(String) : [],
+    wishlist: Array.isArray(raw.wishlist) ? raw.wishlist.map(String) : [],
+    places,
+  };
+}
+
 function fallbackContent() {
   return {
     profile: { ...fallbackProfile },
     articles: normalizeArticles(fallbackArticles) || [],
+    travel: normalizeTravel(fallbackTravel),
   };
 }
 
@@ -43,6 +79,7 @@ export async function loadSiteContent() {
     cached = {
       profile,
       articles: normalized ?? normalizeArticles(fallbackArticles) ?? [],
+      travel: normalizeTravel(data.travel && typeof data.travel === 'object' ? data.travel : fallbackTravel),
     };
   } catch (error) {
     cached = fallbackContent();

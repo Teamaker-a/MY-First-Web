@@ -1,4 +1,4 @@
-import { loadSiteContent } from './content-store.js?v=20261101a';
+import { loadSiteContent } from './content-store.js?v=20261102a';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

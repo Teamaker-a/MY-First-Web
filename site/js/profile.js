@@ -1,4 +1,4 @@
-import { loadSiteContent } from './content-store.js?v=20261101a';
+import { loadSiteContent } from './content-store.js?v=20261102a';
 
 const setAll = (selector, value) => {
   const text = String(value || '').trim();

@@ -1,4 +1,5 @@
 import { GitHubApiError, GitHubClient, parseRepo } from './github-client.js?v=20261101a';
+import { travel as fallbackTravel } from './data.js?v=20261029a';
 
 const CONFIG_KEY = 'sx-content-admin-config-v1';
 const TOKEN_KEY = 'sx-content-admin-token-v1';
@@ -10,6 +11,7 @@ const DEFAULT_CONFIG = {
   siteRoot: 'site',
   contentPath: 'site/content/site.json',
   mediaPath: 'site/assets/images/uploads',
+  travelMediaPath: 'site/assets/images/travel',
 };
 
 const EMPTY_PROFILE = {
@@ -22,6 +24,14 @@ const EMPTY_PROFILE = {
   xiaohongshu: '',
 };
 
+const PROVINCES = [
+  '北京市', '天津市', '河北省', '山西省', '内蒙古自治区', '辽宁省', '吉林省', '黑龙江省',
+  '上海市', '江苏省', '浙江省', '安徽省', '福建省', '江西省', '山东省', '河南省',
+  '湖北省', '湖南省', '广东省', '广西壮族自治区', '海南省', '重庆市', '四川省', '贵州省',
+  '云南省', '西藏自治区', '陕西省', '甘肃省', '青海省', '宁夏回族自治区', '新疆维吾尔自治区',
+  '台湾省', '香港特别行政区', '澳门特别行政区',
+];
+
 const state = {
   client: null,
   config: null,
@@ -29,6 +39,7 @@ const state = {
   sha: null,
   savedSnapshot: '',
   selectedSlug: null,
+  selectedProvince: null,
   isNew: false,
   newArticle: null,
   dirty: false,
@@ -52,6 +63,7 @@ const dom = {
   siteRootInput: document.getElementById('siteRootInput'),
   contentPathInput: document.getElementById('contentPathInput'),
   mediaPathInput: document.getElementById('mediaPathInput'),
+  travelMediaPathInput: document.getElementById('travelMediaPathInput'),
   repoLabel: document.getElementById('repoLabel'),
   branchLabel: document.getElementById('branchLabel'),
   repoLink: document.getElementById('repoLink'),
@@ -62,6 +74,7 @@ const dom = {
   commitLink: document.getElementById('commitLink'),
   articlesPanel: document.getElementById('articlesPanel'),
   profilePanel: document.getElementById('profilePanel'),
+  travelPanel: document.getElementById('travelPanel'),
   settingsPanel: document.getElementById('settingsPanel'),
   newArticleBtn: document.getElementById('newArticleBtn'),
   articleCount: document.getElementById('articleCount'),
@@ -95,8 +108,26 @@ const dom = {
   settingsSiteRootInput: document.getElementById('settingsSiteRootInput'),
   settingsContentPathInput: document.getElementById('settingsContentPathInput'),
   settingsMediaPathInput: document.getElementById('settingsMediaPathInput'),
+  settingsTravelMediaPathInput: document.getElementById('settingsTravelMediaPathInput'),
   tokenStatus: document.getElementById('tokenStatus'),
   changeTokenBtn: document.getElementById('changeTokenBtn'),
+  newProvinceSelect: document.getElementById('newProvinceSelect'),
+  addProvinceBtn: document.getElementById('addProvinceBtn'),
+  travelCount: document.getElementById('travelCount'),
+  travelList: document.getElementById('travelList'),
+  travelEmpty: document.getElementById('travelEmpty'),
+  travelForm: document.getElementById('travelForm'),
+  travelHeading: document.getElementById('travelHeading'),
+  deleteProvinceBtn: document.getElementById('deleteProvinceBtn'),
+  travelStatus: document.getElementById('travelStatus'),
+  travelProvinceInput: document.getElementById('travelProvinceInput'),
+  travelTitleInput: document.getElementById('travelTitleInput'),
+  travelSubtitleInput: document.getElementById('travelSubtitleInput'),
+  travelNoteInput: document.getElementById('travelNoteInput'),
+  travelImageInput: document.getElementById('travelImageInput'),
+  travelPhotos: document.getElementById('travelPhotos'),
+  travelUploadStatus: document.getElementById('travelUploadStatus'),
+  travelEditorStatus: document.getElementById('travelEditorStatus'),
   toast: document.getElementById('toast'),
 };
 
@@ -143,14 +174,16 @@ function normalizeConfig(input) {
   const siteRoot = cleanPath(raw.siteRoot);
   const contentPath = cleanPath(raw.contentPath);
   const mediaPath = cleanPath(raw.mediaPath);
+  const travelMediaPath = cleanPath(raw.travelMediaPath);
 
   if (!contentPath.endsWith('.json')) throw new Error('内容文件路径必须以 .json 结尾。');
-  if (!mediaPath) throw new Error('请填写图片目录。');
-  for (const path of [siteRoot, contentPath, mediaPath]) {
+  if (!mediaPath) throw new Error('请填写文章图片目录。');
+  if (!travelMediaPath) throw new Error('请填写旅行图片目录。');
+  for (const path of [siteRoot, contentPath, mediaPath, travelMediaPath]) {
     if (path && path.split('/').includes('..')) throw new Error('路径里不能包含 ..');
   }
 
-  return { repo, branch, siteRoot, contentPath, mediaPath };
+  return { repo, branch, siteRoot, contentPath, mediaPath, travelMediaPath };
 }
 
 function loadStoredConfig() {
@@ -229,6 +262,37 @@ function normalizeArticle(article, index) {
   };
 }
 
+function normalizePhoto(photo, index) {
+  if (!photo || typeof photo !== 'object') return { src: '', caption: `第 ${index + 1} 张` };
+  return {
+    ...photo,
+    src: String(photo.src || ''),
+    caption: String(photo.caption || `第 ${index + 1} 张`),
+  };
+}
+
+function normalizeTravel(source) {
+  const raw = source && typeof source === 'object' ? source : fallbackTravel;
+  const places = {};
+  Object.entries(raw.places || {}).forEach(([name, place]) => {
+    if (!place || typeof place !== 'object') return;
+    places[name] = {
+      ...place,
+      title: String(place.title || ''),
+      subtitle: String(place.subtitle || ''),
+      note: String(place.note || ''),
+      wish: Boolean(place.wish),
+      photos: Array.isArray(place.photos) ? place.photos.map(normalizePhoto) : [],
+    };
+  });
+  return {
+    demo: Boolean(raw.demo),
+    visited: Array.isArray(raw.visited) ? raw.visited.map(String) : [],
+    wishlist: Array.isArray(raw.wishlist) ? raw.wishlist.map(String) : [],
+    places,
+  };
+}
+
 function normalizeContent(raw) {
   const content = raw && typeof raw === 'object' ? raw : {};
   const profile = {
@@ -243,6 +307,9 @@ function normalizeContent(raw) {
     updatedAt: String(content.updatedAt || ''),
     profile,
     articles,
+    travel: normalizeTravel(
+      content.travel && typeof content.travel === 'object' ? content.travel : fallbackTravel,
+    ),
   };
 }
 
@@ -260,6 +327,7 @@ function fillLoginForm(config) {
   dom.siteRootInput.value = config.siteRoot || '';
   dom.contentPathInput.value = config.contentPath || DEFAULT_CONFIG.contentPath;
   dom.mediaPathInput.value = config.mediaPath || DEFAULT_CONFIG.mediaPath;
+  dom.travelMediaPathInput.value = config.travelMediaPath || DEFAULT_CONFIG.travelMediaPath;
 }
 
 function setLoginError(message) {
@@ -282,15 +350,21 @@ function showLogin(message = '') {
 
 function setView(view) {
   state.view = view;
-  const titles = { articles: '文章', profile: '个人资料', settings: '设置' };
+  const titles = { articles: '文章', profile: '个人资料', travel: '旅行', settings: '设置' };
   dom.viewTitle.textContent = titles[view] || '文章';
   dom.articlesPanel.hidden = view !== 'articles';
   dom.profilePanel.hidden = view !== 'profile';
+  dom.travelPanel.hidden = view !== 'travel';
   dom.settingsPanel.hidden = view !== 'settings';
   document.querySelectorAll('.side-link').forEach((button) => {
     button.classList.toggle('active', button.dataset.view === view);
   });
   if (view === 'profile') fillProfileForm();
+  if (view === 'travel') {
+    fillProvinceOptions();
+    renderTravelList();
+    fillTravelEditor(state.selectedProvince);
+  }
   if (view === 'settings') fillSettingsForm();
 }
 
@@ -630,6 +704,7 @@ function fillSettingsForm() {
   dom.settingsSiteRootInput.value = state.config.siteRoot;
   dom.settingsContentPathInput.value = state.config.contentPath;
   dom.settingsMediaPathInput.value = state.config.mediaPath;
+  dom.settingsTravelMediaPathInput.value = state.config.travelMediaPath;
 }
 
 function handleSaveSettings(event) {
@@ -646,6 +721,7 @@ function handleSaveSettings(event) {
       siteRoot: dom.settingsSiteRootInput.value,
       contentPath: dom.settingsContentPathInput.value,
       mediaPath: dom.settingsMediaPathInput.value,
+      travelMediaPath: dom.settingsTravelMediaPathInput.value,
     });
   } catch (error) {
     toast(error.message || '设置格式不正确。', 'error');
@@ -722,6 +798,280 @@ async function handleImageUpload(file) {
   }
 }
 
+function currentPlace() {
+  if (!state.content || !state.selectedProvince) return null;
+  return state.content.travel.places[state.selectedProvince] || null;
+}
+
+function travelStatusFor(name) {
+  const travel = state.content?.travel;
+  if (!travel) return 'neutral';
+  if (travel.visited.includes(name)) return 'visited';
+  if (travel.wishlist.includes(name)) return 'wishlist';
+  return 'neutral';
+}
+
+function setTravelStatus(name, status) {
+  const travel = state.content.travel;
+  travel.visited = travel.visited.filter((item) => item !== name);
+  travel.wishlist = travel.wishlist.filter((item) => item !== name);
+  if (status === 'visited') travel.visited.push(name);
+  if (status === 'wishlist') travel.wishlist.push(name);
+  const place = travel.places[name];
+  if (place) place.wish = status === 'wishlist';
+}
+
+function fillProvinceOptions() {
+  if (!dom.newProvinceSelect || !state.content) return;
+  const existing = new Set(Object.keys(state.content.travel.places));
+  const available = PROVINCES.filter((name) => !existing.has(name));
+  dom.newProvinceSelect.innerHTML = available.length
+    ? '<option value="">选择省份…</option>' + available.map((name) => `<option value="${esc(name)}">${esc(name)}</option>`).join('')
+    : '<option value="">所有省份都已添加</option>';
+}
+
+function renderTravelList() {
+  if (!dom.travelList || !state.content) return;
+  const places = state.content.travel.places;
+  const names = Object.keys(places);
+  dom.travelCount.textContent = String(names.length);
+  if (!names.length) {
+    dom.travelList.innerHTML = '<p class="article-list-empty">还没有旅行记录。选择省份开始添加。</p>';
+    return;
+  }
+  dom.travelList.innerHTML = names
+    .map((name) => {
+      const place = places[name];
+      const status = travelStatusFor(name);
+      const label = status === 'visited' ? '去过' : status === 'wishlist' ? '最想去' : '未点亮';
+      const active = name === state.selectedProvince;
+      return `
+        <button class="article-row${active ? ' active' : ''}" type="button" data-province="${esc(name)}">
+          <span class="row-meta">${label} · ${place.photos?.length || 0} 张照片</span>
+          <strong>${esc(name)}</strong>
+          <small>${esc(place.title || place.note || '还没有旅行文案')}</small>
+        </button>`;
+    })
+    .join('');
+}
+
+function travelPhotoPreview(photo) {
+  const src = String(photo?.src || '');
+  if (!src) return '';
+  if (/^https?:\/\//i.test(src)) return src;
+  const root = (state.config?.siteRoot || '').replace(/^\/+|\/+$/g, '');
+  const repoPath = root ? `${root}/${src}` : src;
+  const encodedPath = repoPath.split('/').map(encodeURIComponent).join('/');
+  return `https://raw.githubusercontent.com/${state.config.repo}/${encodeURIComponent(state.config.branch)}/${encodedPath}`;
+}
+
+function renderTravelPhotos(place) {
+  if (!dom.travelPhotos) return;
+  const photos = place?.photos || [];
+  if (!photos.length) {
+    dom.travelPhotos.innerHTML = '<p class="article-list-empty">还没有照片。没有照片时会继续显示示例占位图。</p>';
+    return;
+  }
+  dom.travelPhotos.innerHTML = photos
+    .map((photo, index) => {
+      const preview = travelPhotoPreview(photo);
+      return `
+        <div class="photo-item" data-photo-index="${index}">
+          <div class="photo-thumb">${preview ? `<img src="${esc(preview)}" alt="${esc(photo.caption || '')}" loading="lazy">` : '示例占位'}</div>
+          <input class="photo-caption" data-caption-index="${index}" type="text" value="${esc(photo.caption || '')}" placeholder="这张照片的说明">
+          <div class="photo-item-foot">
+            <span class="photo-src">${esc(photo.src || '占位图')}</span>
+            <button class="photo-remove" data-remove-index="${index}" type="button">移除</button>
+          </div>
+        </div>`;
+    })
+    .join('');
+
+  dom.travelPhotos.querySelectorAll('[data-caption-index]').forEach((input) => {
+    input.addEventListener('input', () => {
+      const photo = (currentPlace()?.photos || [])[Number(input.dataset.captionIndex)];
+      if (!photo) return;
+      photo.caption = input.value;
+      markDirty();
+    });
+  });
+  dom.travelPhotos.querySelectorAll('[data-remove-index]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const placeNow = currentPlace();
+      if (!placeNow) return;
+      placeNow.photos.splice(Number(button.dataset.removeIndex), 1);
+      markDirty();
+      renderTravelPhotos(placeNow);
+    });
+  });
+}
+
+function fillTravelEditor(name) {
+  const place = name ? state.content.travel.places[name] : null;
+  if (!place) {
+    dom.travelForm.hidden = true;
+    dom.travelEmpty.hidden = false;
+    return;
+  }
+  dom.travelEmpty.hidden = true;
+  dom.travelForm.hidden = false;
+  dom.travelHeading.textContent = name;
+  dom.travelProvinceInput.value = name;
+  dom.travelStatus.value = travelStatusFor(name);
+  dom.travelTitleInput.value = place.title || '';
+  dom.travelSubtitleInput.value = place.subtitle || '';
+  dom.travelNoteInput.value = place.note || '';
+  dom.travelEditorStatus.textContent = '';
+  dom.travelUploadStatus.textContent = '一次可以选多张，单张不超过 5MB。';
+  renderTravelPhotos(place);
+}
+
+function selectProvince(name) {
+  if (!state.content?.travel.places[name]) return;
+  state.selectedProvince = name;
+  renderTravelList();
+  fillTravelEditor(name);
+}
+
+function addProvince() {
+  if (!state.content) return;
+  const name = dom.newProvinceSelect.value;
+  if (!name) {
+    toast('请选择一个省份。', 'error');
+    return;
+  }
+  if (state.content.travel.places[name]) {
+    selectProvince(name);
+    return;
+  }
+  state.content.travel.places[name] = {
+    title: '',
+    subtitle: '',
+    note: '',
+    wish: false,
+    photos: [],
+  };
+  state.selectedProvince = name;
+  renderTravelList();
+  fillProvinceOptions();
+  fillTravelEditor(name);
+  markDirty();
+}
+
+function syncTravelFromForm() {
+  const place = currentPlace();
+  if (!place || !state.selectedProvince) return;
+  place.title = dom.travelTitleInput.value.trim();
+  place.subtitle = dom.travelSubtitleInput.value.trim();
+  place.note = dom.travelNoteInput.value.trim();
+  setTravelStatus(state.selectedProvince, dom.travelStatus.value);
+  dom.travelHeading.textContent = state.selectedProvince;
+}
+
+function handleTravelInput() {
+  syncTravelFromForm();
+  markDirty();
+}
+
+async function handleTravelImageUpload(files) {
+  if (!files?.length) return;
+  if (!state.client) {
+    toast('还没有连接仓库。', 'error');
+    return;
+  }
+  const place = currentPlace();
+  if (!place) {
+    toast('请先选择一个省份。', 'error');
+    return;
+  }
+
+  if (Array.isArray(place.photos) && place.photos.every((photo) => !photo.src)) {
+    place.photos = [];
+  }
+  dom.travelUploadStatus.textContent = '正在上传旅行照片…';
+  let uploaded = 0;
+  for (const file of Array.from(files)) {
+    if (!file.type.startsWith('image/')) {
+      toast(`${file.name} 不是图片，已跳过。`, 'error');
+      continue;
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      toast(`${file.name} 超过 5MB，已跳过。`, 'error');
+      continue;
+    }
+    try {
+      const extension = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
+      const base = file.name
+        .replace(/\.[^.]+$/, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9_-]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 48) || 'travel-photo';
+      const stamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
+      const filename = `${stamp}-${base}-${uploaded + 1}.${extension}`;
+      const repoPath = `${state.config.travelMediaPath}/${filename}`;
+      const webPath = webPathForRepo(repoPath);
+      await state.client.uploadBinary(
+        repoPath,
+        await file.arrayBuffer(),
+        `content: upload travel photo ${filename}`,
+      );
+      place.photos.push({
+        src: webPath,
+        caption: file.name.replace(/\.[^.]+$/, ''),
+      });
+      uploaded += 1;
+      markDirty();
+      renderTravelPhotos(place);
+      dom.travelUploadStatus.textContent = `已上传 ${uploaded} 张；保存旅行后写入内容。`;
+    } catch (error) {
+      toast(describeError(error), 'error');
+      dom.travelUploadStatus.textContent = '有照片上传失败，请重试。';
+    }
+  }
+  dom.travelImageInput.value = '';
+}
+
+function handleDeleteProvince() {
+  const name = state.selectedProvince;
+  if (!name || !state.content.travel.places[name]) return;
+  if (!window.confirm(`移除「${name}」的旅行记录和照片引用？照片文件不会删除。`)) return;
+  delete state.content.travel.places[name];
+  state.content.travel.visited = state.content.travel.visited.filter((item) => item !== name);
+  state.content.travel.wishlist = state.content.travel.wishlist.filter((item) => item !== name);
+  state.selectedProvince = null;
+  renderTravelList();
+  fillProvinceOptions();
+  fillTravelEditor(null);
+  markDirty();
+  toast('已移除；点“保存旅行”提交到 GitHub。');
+}
+
+async function handleSaveTravel(event) {
+  event.preventDefault();
+  if (state.isNew) {
+    toast('请先保存或丢弃正在编辑的新文章。', 'error');
+    return;
+  }
+  const place = currentPlace();
+  if (!place) {
+    toast('请先选择一个省份。', 'error');
+    return;
+  }
+  syncTravelFromForm();
+  if (!place.title.trim()) {
+    dom.travelEditorStatus.textContent = '旅行标题不能为空。';
+    toast('请填写旅行标题。', 'error');
+    return;
+  }
+  state.content.travel.demo = false;
+  const ok = await saveContent(`content: update travel "${state.selectedProvince}"`);
+  if (ok) {
+    dom.travelEditorStatus.textContent = '已保存。';
+    updateDirty();
+  }
+}
+
 function bindEvents() {
   dom.loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -734,6 +1084,7 @@ function bindEvents() {
         siteRoot: dom.siteRootInput.value,
         contentPath: dom.contentPathInput.value,
         mediaPath: dom.mediaPathInput.value,
+        travelMediaPath: dom.travelMediaPathInput.value,
       });
     } catch (error) {
       setLoginError(error.message || '请检查仓库和路径。');
@@ -773,6 +1124,19 @@ function bindEvents() {
       markDirty();
     });
   });
+
+  dom.addProvinceBtn.addEventListener('click', addProvince);
+  dom.travelList.addEventListener('click', (event) => {
+    const row = event.target.closest('[data-province]');
+    if (row) selectProvince(row.dataset.province);
+  });
+  dom.travelForm.addEventListener('submit', handleSaveTravel);
+  [dom.travelTitleInput, dom.travelSubtitleInput, dom.travelNoteInput].forEach((input) => {
+    input.addEventListener('input', handleTravelInput);
+  });
+  dom.travelStatus.addEventListener('change', handleTravelInput);
+  dom.travelImageInput.addEventListener('change', () => handleTravelImageUpload(dom.travelImageInput.files));
+  dom.deleteProvinceBtn.addEventListener('click', handleDeleteProvince);
 
   dom.imageInput.addEventListener('change', () => handleImageUpload(dom.imageInput.files?.[0]));
   dom.profileForm.addEventListener('submit', handleSaveProfile);
@@ -829,6 +1193,7 @@ async function connect(token, config) {
   state.source = source;
   state.user = user;
   state.selectedSlug = content.articles[0]?.slug || null;
+  state.selectedProvince = Object.keys(content.travel.places)[0] || null;
   state.isNew = false;
   state.newArticle = null;
   state.savedSnapshot = JSON.stringify(content);
@@ -851,6 +1216,9 @@ async function connect(token, config) {
     showEmptyEditor();
   }
   fillProfileForm();
+  fillProvinceOptions();
+  renderTravelList();
+  fillTravelEditor(state.selectedProvince);
   fillSettingsForm();
   updateDirty();
   updateStatus();

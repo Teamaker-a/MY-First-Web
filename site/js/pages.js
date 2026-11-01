@@ -1,5 +1,5 @@
 import { works } from './data.js?v=20261029a';
-import { loadSiteContent } from './content-store.js?v=20261101a';
+import { loadSiteContent } from './content-store.js?v=20261102a';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const page = document.body.dataset.page;

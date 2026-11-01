@@ -1,5 +1,6 @@
 import * as THREE from '../vendor/three.module.js';
-import { travel } from './data.js';
+import { travel as fallbackTravel } from './data.js';
+import { loadSiteContent } from './content-store.js?v=20261102a';
 import { MusicBox } from './music.js';
 import { createCarousel3D } from './carousel3d.js';
 
@@ -8,6 +9,7 @@ const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selec
 const gsap = window.gsap;
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const music = new MusicBox();
+let travel = fallbackTravel;
 
 const dom = {
   canvas: $('#globe-canvas'),
@@ -1593,6 +1595,13 @@ function bindUI() {
 // --------------------------------------------------------------------- init
 
 async function init() {
+  try {
+    const content = await loadSiteContent();
+    if (content.travel) travel = content.travel;
+  } catch (error) {
+    // Keep the bundled travel data if the content file cannot be loaded.
+  }
+
   bindUI();
   await Promise.all([initGlobe(), initMap()]);
 }

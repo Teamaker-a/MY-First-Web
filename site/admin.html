@@ -6,7 +6,7 @@
   <title>内容管理 · 沈旭斐</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="css/fonts.css?v=20261101a">
-  <link rel="stylesheet" href="css/admin.css?v=20261101a">
+  <link rel="stylesheet" href="css/admin.css?v=20261102c">
 </head>
 <body class="admin-page">
   <div class="admin-grain" aria-hidden="true"></div>
@@ -44,8 +44,12 @@
             <input id="contentPathInput" type="text" value="site/content/site.json" autocomplete="off" spellcheck="false">
           </label>
           <label class="field">
-            <span>图片目录（仓库内）</span>
+            <span>文章图片目录（仓库内）</span>
             <input id="mediaPathInput" type="text" value="site/assets/images/uploads" autocomplete="off" spellcheck="false">
+          </label>
+          <label class="field">
+            <span>旅行图片目录（仓库内）</span>
+            <input id="travelMediaPathInput" type="text" value="site/assets/images/travel" autocomplete="off" spellcheck="false">
           </label>
           <p class="field-note">如果仓库根目录就是网站根目录，把站点根目录留空，内容路径改成 `content/site.json`。</p>
         </details>
@@ -79,8 +83,12 @@
           <span class="side-num">02</span>
           <span>个人资料</span>
         </button>
-        <button class="side-link" type="button" data-view="settings">
+        <button class="side-link" type="button" data-view="travel">
           <span class="side-num">03</span>
+          <span>旅行</span>
+        </button>
+        <button class="side-link" type="button" data-view="settings">
+          <span class="side-num">04</span>
           <span>设置</span>
         </button>
       </nav>
@@ -236,6 +244,89 @@
         </form>
       </section>
 
+      <section class="panel travel-panel" id="travelPanel" hidden>
+        <div class="panel-intro">
+          <p>管理省份状态、旅行标题 / 文案和木马照片。照片会提交到旅行图片目录；保存后地图和木马读取这里。</p>
+          <div class="travel-add">
+            <select id="newProvinceSelect" aria-label="选择省份"></select>
+            <button class="primary-btn small" id="addProvinceBtn" type="button">添加省份</button>
+          </div>
+        </div>
+
+        <div class="travel-layout">
+          <aside class="article-list-wrap travel-list-wrap">
+            <div class="list-caption">
+              <span>省份</span>
+              <span id="travelCount">0</span>
+            </div>
+            <div class="article-list" id="travelList"></div>
+          </aside>
+
+          <section class="editor-card travel-editor-card">
+            <div class="editor-empty" id="travelEmpty">
+              <span class="empty-mark">✿</span>
+              <h2>选择一个省份</h2>
+              <p>或从上方添加一个新省份。</p>
+            </div>
+
+            <form class="editor-form" id="travelForm" hidden>
+              <div class="editor-head">
+                <div>
+                  <p class="admin-kicker">TRAVEL PLACE</p>
+                  <h2 id="travelHeading">省份</h2>
+                </div>
+                <div class="editor-actions">
+                  <button class="danger-btn" id="deleteProvinceBtn" type="button">移除省份</button>
+                  <button class="primary-btn small" type="submit">保存旅行</button>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <label class="field">
+                  <span>状态</span>
+                  <select id="travelStatus">
+                    <option value="visited">去过 · 粉色</option>
+                    <option value="wishlist">最想去 · 蓝色</option>
+                    <option value="neutral">未点亮</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>省份名（地图匹配）</span>
+                  <input id="travelProvinceInput" type="text" readonly>
+                </label>
+              </div>
+
+              <label class="field">
+                <span>旅行标题</span>
+                <input id="travelTitleInput" type="text" placeholder="江南的雨">
+              </label>
+              <label class="field">
+                <span>副标题</span>
+                <input id="travelSubtitleInput" type="text" placeholder="杭州 · 乌镇 · 2025 春">
+              </label>
+              <label class="field">
+                <span>旅行文案</span>
+                <textarea id="travelNoteInput" rows="5" placeholder="那几天一直在下雨，反而觉得江南就该是湿的。"></textarea>
+              </label>
+
+              <div class="travel-photos-head">
+                <div>
+                  <span class="field-label">照片</span>
+                  <p class="field-note">竖版 3:4 左右最好；没有照片时会继续显示示例占位图。</p>
+                </div>
+                <label class="upload-btn">
+                  <span>＋ 上传照片</span>
+                  <input id="travelImageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" multiple hidden>
+                </label>
+              </div>
+              <div class="photo-grid" id="travelPhotos"></div>
+              <p class="editor-note" id="travelUploadStatus">一次可以选多张，单张不超过 5MB。</p>
+              <p class="editor-note" id="travelEditorStatus"></p>
+            </form>
+          </section>
+        </div>
+      </section>
+
       <section class="panel settings-panel" id="settingsPanel" hidden>
         <div class="panel-intro">
           <p>仓库路径和登录状态。修改仓库设置后会重新读取内容。</p>
@@ -262,8 +353,12 @@
             </label>
           </div>
           <label class="field">
-            <span>图片目录</span>
+            <span>文章图片目录</span>
             <input id="settingsMediaPathInput" type="text">
+          </label>
+          <label class="field">
+            <span>旅行图片目录</span>
+            <input id="settingsTravelMediaPathInput" type="text">
           </label>
           <div class="settings-note">
             <strong>Token</strong>
@@ -279,6 +374,6 @@
   </section>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="js/admin.js?v=20261101a"></script>
+  <script type="module" src="js/admin.js?v=20261102c"></script>
 </body>
 </html>
