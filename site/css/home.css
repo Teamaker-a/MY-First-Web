@@ -647,3 +647,23 @@ body.home-page ::selection {
     animation: none !important;
   }
 }
+
+/* Longer profile names: keep the cover on one screen without shrinking short names. */
+body.home-page.has-long-name .home-name {
+  font-size: clamp(42px, 4.8vw, 64px);
+  letter-spacing: 0.12em !important;
+  text-indent: 0.12em;
+}
+
+body.home-page.has-very-long-name .home-name {
+  font-size: clamp(32px, 3.8vw, 54px);
+  letter-spacing: 0.1em !important;
+  text-indent: 0.1em;
+}
+
+body.home-page.has-extra-long-name .home-name {
+  font-size: clamp(30px, 3.2vw, 46px);
+  letter-spacing: 0.06em !important;
+  text-indent: 0.06em;
+}
+

@@ -11,6 +11,12 @@ const setAll = (selector, value) => {
 async function init() {
   try {
     const { profile } = await loadSiteContent();
+    if (profile.name) {
+      const length = Array.from(String(profile.name)).length;
+      document.body.classList.toggle('has-long-name', length > 4);
+      document.body.classList.toggle('has-very-long-name', length > 6);
+      document.body.classList.toggle('has-extra-long-name', length > 8);
+    }
     setAll('[data-profile-name]', profile.name);
     setAll('[data-profile-tagline]', profile.tagline);
     setAll('[data-profile-intro]', profile.intro);
