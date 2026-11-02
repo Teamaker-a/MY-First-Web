@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-02T13:04:42.175Z",
+  "updatedAt": "2026-11-02T13:10:48.477Z",
   "profile": {
     "name": "无法芝士普通朋友",
     "tagline": "用 AI 做点好玩的",
@@ -34,7 +34,8 @@
       "四川省",
       "天津市",
       "重庆市",
-      "河南省"
+      "河南省",
+      "湖北省"
     ],
     "wishlist": [
       "新疆维吾尔自治区",
@@ -241,6 +242,38 @@
           {
             "src": "assets/images/travel/20261102130428-_20261102210147_55_457-1.jpg",
             "caption": "蜡笔小新"
+          }
+        ]
+      },
+      "湖北省": {
+        "title": "蒜鸟,蒜鸟",
+        "subtitle": "武汉2026春",
+        "note": "",
+        "wish": false,
+        "photos": [
+          {
+            "src": "assets/images/travel/20261102130805-_20261102210700_56_457-1.jpg",
+            "caption": "好美味的热干面!"
+          },
+          {
+            "src": "assets/images/travel/20261102130830-_20261102210701_57_457-1.jpg",
+            "caption": "武汉长江大桥"
+          },
+          {
+            "src": "assets/images/travel/20261102130851-_20261102210702_58_457-1.jpg",
+            "caption": "好好吃的烧烤!"
+          },
+          {
+            "src": "assets/images/travel/20261102130913-_20261102210706_62_457-1.jpg",
+            "caption": "肥肥虾庄嘻嘻"
+          },
+          {
+            "src": "assets/images/travel/20261102130945-_20261102210707_63_457-1.jpg",
+            "caption": "勾践,你忘了会稽的耻辱了吗?"
+          },
+          {
+            "src": "assets/images/travel/20261102131021-_20261102210708_64_457-1.jpg",
+            "caption": "哪个小美女给我带的hellokitty呀"
           }
         ]
       }
