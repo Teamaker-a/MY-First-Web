@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-02T12:07:37.464Z",
+  "updatedAt": "2026-11-02T12:12:34.101Z",
   "profile": {
     "name": "无法芝士普通朋友",
     "tagline": "用 AI 做点好玩的",
@@ -143,6 +143,10 @@
           {
             "src": "assets/images/travel/20261102120704-_20261102200153_19_457-1.jpg",
             "caption": "魏家汉堡魏家凉皮我爱你们吧"
+          },
+          {
+            "src": "assets/images/travel/20261102121216-_20261102200155_21_457-1.jpg",
+            "caption": "不到长城非好汉"
           }
         ],
         "wish": false
