@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-02T12:41:38.407Z",
+  "updatedAt": "2026-11-02T12:51:42.237Z",
   "profile": {
     "name": "无法芝士普通朋友",
     "tagline": "用 AI 做点好玩的",
@@ -32,7 +32,8 @@
       "福建省",
       "北京市",
       "云南省",
-      "四川省"
+      "四川省",
+      "天津市"
     ],
     "wishlist": [
       "新疆维吾尔自治区",
@@ -151,6 +152,42 @@
           {
             "src": "assets/images/travel/20261102122705-_20261102202350_22_457-1.jpg",
             "caption": "洱海的鸥鸟"
+          }
+        ]
+      },
+      "天津市": {
+        "title": "来到了天津卫....",
+        "subtitle": "天津25.春",
+        "note": "",
+        "wish": false,
+        "photos": [
+          {
+            "src": "assets/images/travel/20261102124826-_20261102204718_42_457-1.jpg",
+            "caption": "天津之眼"
+          },
+          {
+            "src": "assets/images/travel/20261102124854-_20261102204713_37_457-1.jpg",
+            "caption": "掰掰跳水"
+          },
+          {
+            "src": "assets/images/travel/20261102124917-_20261102204716_40_457-1.jpg",
+            "caption": "跳水"
+          },
+          {
+            "src": "assets/images/travel/20261102124937-_20261102204712_36_457-1.jpg",
+            "caption": "张爱玲旧居"
+          },
+          {
+            "src": "assets/images/travel/20261102125007-_20261102204714_38_457-1.jpg",
+            "caption": "其实很难吃的煎饼果子罢了"
+          },
+          {
+            "src": "assets/images/travel/20261102125040-_20261102204715_39_457-1.jpg",
+            "caption": "最好吃的一餐--味之"
+          },
+          {
+            "src": "assets/images/travel/20261102125117-_20261102204717_41_457-1.jpg",
+            "caption": "海河牛奶~"
           }
         ]
       }
