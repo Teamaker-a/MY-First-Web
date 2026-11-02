@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-02T12:27:22.610Z",
+  "updatedAt": "2026-11-02T12:41:38.407Z",
   "profile": {
     "name": "无法芝士普通朋友",
     "tagline": "用 AI 做点好玩的",
@@ -27,12 +27,12 @@
     "visited": [
       "江苏省",
       "广东省",
-      "四川省",
       "重庆市",
       "湖南省",
       "福建省",
       "北京市",
-      "云南省"
+      "云南省",
+      "四川省"
     ],
     "wishlist": [
       "新疆维吾尔自治区",
@@ -43,54 +43,25 @@
     ],
     "places": {
       "四川省": {
-        "title": "在山里发呆",
-        "subtitle": "成都 · 四姑娘山 · 2024 秋",
-        "note": "第一次看到雪山的时候，脑子里什么也没想。风很大，但人很安静。",
+        "title": "家乡",
+        "subtitle": "一年四季",
+        "note": "难以概括就放点照片纪念高中好了",
         "photos": [
           {
-            "caption": "进山的路",
-            "motif": "mountain",
-            "tone": [
-              "#dfe6e0",
-              "#8aa39a"
-            ],
-            "src": ""
+            "src": "assets/images/travel/20261102123537-_20261102203218_30_457-1.jpg",
+            "caption": "好年轻.."
           },
           {
-            "caption": "四姑娘山的下午",
-            "motif": "mountain",
-            "tone": [
-              "#cfe0ea",
-              "#6f8fa8"
-            ],
-            "src": ""
+            "src": "assets/images/travel/20261102123608-_20261102203219_31_457-1.jpg",
+            "caption": "高三的一个放松活动吧"
           },
           {
-            "caption": "成都的茶馆",
-            "motif": "city",
-            "tone": [
-              "#f2dcb9",
-              "#b0835d"
-            ],
-            "src": ""
+            "src": "assets/images/travel/20261102123644-_20261102203254_32_457-1.jpg",
+            "caption": "高二初雪,几年没下过雪的成都就这样从五楼跑下来看"
           },
           {
-            "caption": "路边的牦牛",
-            "motif": "forest",
-            "tone": [
-              "#e6e0cb",
-              "#8a9270"
-            ],
-            "src": ""
-          },
-          {
-            "caption": "回成都的末班车",
-            "motif": "city",
-            "tone": [
-              "#e8c9c4",
-              "#8d7580"
-            ],
-            "src": ""
+            "src": "assets/images/travel/20261102124125-_20261102203831_34_457-1.jpg",
+            "caption": "嗯..."
           }
         ],
         "wish": false
