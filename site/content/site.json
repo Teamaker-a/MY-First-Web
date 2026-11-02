@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-02T12:04:46.741Z",
+  "updatedAt": "2026-11-02T12:07:37.464Z",
   "profile": {
     "name": "无法芝士普通朋友",
     "tagline": "用 AI 做点好玩的",
@@ -131,6 +131,18 @@
           {
             "src": "assets/images/travel/20261102120410-_20261102200151_17_457-1.jpg",
             "caption": "天安门看升旗"
+          },
+          {
+            "src": "assets/images/travel/20261102120502-_20261102200154_20_457-1.jpg",
+            "caption": "颐和园"
+          },
+          {
+            "src": "assets/images/travel/20261102120543-_20261102200152_18_457-1.jpg",
+            "caption": "属于故宫的红瓦蓝天"
+          },
+          {
+            "src": "assets/images/travel/20261102120704-_20261102200153_19_457-1.jpg",
+            "caption": "魏家汉堡魏家凉皮我爱你们吧"
           }
         ],
         "wish": false
