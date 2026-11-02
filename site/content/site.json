@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-01T15:17:04.602Z",
+  "updatedAt": "2026-11-02T11:52:56.517Z",
   "profile": {
     "name": "无法芝士普通朋友",
     "tagline": "用 AI 做点好玩的",
@@ -25,7 +25,6 @@
   "travel": {
     "demo": false,
     "visited": [
-      "上海市",
       "江苏省",
       "广东省",
       "四川省",
@@ -90,50 +89,6 @@
             "tone": [
               "#e8c9c4",
               "#8d7580"
-            ],
-            "src": ""
-          }
-        ],
-        "wish": false
-      },
-      "上海市": {
-        "title": "城市的缝隙",
-        "subtitle": "上海 · 2025",
-        "note": "喜欢在晚上从地铁口出来，看霓虹和梧桐一起亮着。城市很大，但总有几条路是属于自己的。",
-        "photos": [
-          {
-            "caption": "武康路的傍晚",
-            "motif": "city",
-            "tone": [
-              "#f1cdb9",
-              "#a8786e"
-            ],
-            "src": ""
-          },
-          {
-            "caption": "便利店门口",
-            "motif": "city",
-            "tone": [
-              "#dfe8e2",
-              "#7f9b93"
-            ],
-            "src": ""
-          },
-          {
-            "caption": "苏州河边的风",
-            "motif": "water",
-            "tone": [
-              "#cdddec",
-              "#7893ad"
-            ],
-            "src": ""
-          },
-          {
-            "caption": "末班地铁",
-            "motif": "city",
-            "tone": [
-              "#d5cfe0",
-              "#7d7496"
             ],
             "src": ""
           }
