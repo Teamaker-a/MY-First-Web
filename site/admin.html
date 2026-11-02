@@ -6,7 +6,7 @@
   <title>内容管理 · 沈旭斐</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="css/fonts.css?v=20261101a">
-  <link rel="stylesheet" href="css/admin.css?v=20261102c">
+  <link rel="stylesheet" href="css/admin.css?v=20261103a">
 </head>
 <body class="admin-page">
   <div class="admin-grain" aria-hidden="true"></div>
@@ -51,6 +51,10 @@
             <span>旅行图片目录（仓库内）</span>
             <input id="travelMediaPathInput" type="text" value="site/assets/images/travel" autocomplete="off" spellcheck="false">
           </label>
+          <label class="field">
+            <span>作品图片目录（仓库内）</span>
+            <input id="worksMediaPathInput" type="text" value="site/assets/images/works" autocomplete="off" spellcheck="false">
+          </label>
           <p class="field-note">如果仓库根目录就是网站根目录，把站点根目录留空，内容路径改成 `content/site.json`。</p>
         </details>
 
@@ -79,16 +83,20 @@
           <span class="side-num">01</span>
           <span>文章</span>
         </button>
-        <button class="side-link" type="button" data-view="profile">
+        <button class="side-link" type="button" data-view="works">
           <span class="side-num">02</span>
+          <span>作品</span>
+        </button>
+        <button class="side-link" type="button" data-view="profile">
+          <span class="side-num">03</span>
           <span>个人资料</span>
         </button>
         <button class="side-link" type="button" data-view="travel">
-          <span class="side-num">03</span>
+          <span class="side-num">04</span>
           <span>旅行</span>
         </button>
         <button class="side-link" type="button" data-view="settings">
-          <span class="side-num">04</span>
+          <span class="side-num">05</span>
           <span>设置</span>
         </button>
       </nav>
@@ -195,6 +203,85 @@
               </div>
 
               <p class="editor-note" id="editorStatus"></p>
+            </form>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel works-panel" id="worksPanel" hidden>
+        <div class="panel-intro">
+          <p>编辑作品标题、类型、年份、说明和链接；可以上传一张封面图，没上传时保留当前的植物图版封面。</p>
+          <button class="primary-btn small" id="newWorkBtn" type="button">＋ 新作品</button>
+        </div>
+
+        <div class="article-layout">
+          <aside class="article-list-wrap">
+            <div class="list-caption">
+              <span>全部作品</span>
+              <span id="worksCount">0</span>
+            </div>
+            <div class="article-list" id="worksList"></div>
+          </aside>
+
+          <section class="editor-card">
+            <div class="editor-empty" id="workEmpty">
+              <span class="empty-mark">✿</span>
+              <h2>选择一个作品</h2>
+              <p>或新建一个作品卡片。</p>
+            </div>
+
+            <form class="editor-form" id="workForm" hidden>
+              <div class="editor-head">
+                <div>
+                  <p class="admin-kicker">SELECTED WORK</p>
+                  <h2 id="workHeading">作品</h2>
+                </div>
+                <div class="editor-actions">
+                  <a class="text-btn" id="viewWorkLink" href="#" target="_blank" rel="noreferrer" hidden>打开链接 ↗</a>
+                  <button class="danger-btn" id="deleteWorkBtn" type="button">删除</button>
+                  <button class="primary-btn small" type="submit">保存作品</button>
+                </div>
+              </div>
+
+              <label class="field">
+                <span>作品标题</span>
+                <input id="workTitleInput" type="text" placeholder="一本书的诞生 · 对页画版图">
+              </label>
+
+              <div class="field-row">
+                <label class="field">
+                  <span>类型</span>
+                  <input id="workTypeInput" type="text" placeholder="排版 / HTML">
+                </label>
+                <label class="field">
+                  <span>年份</span>
+                  <input id="workYearInput" type="text" placeholder="2025">
+                </label>
+              </div>
+
+              <label class="field">
+                <span>项目链接</span>
+                <input id="workLinkInput" type="text" placeholder="https://... 或相对路径">
+              </label>
+
+              <label class="field">
+                <span>项目说明</span>
+                <textarea id="workDescInput" rows="4" placeholder="一句话说明这个项目做了什么。"></textarea>
+              </label>
+
+              <div class="work-cover-editor">
+                <div class="work-cover-preview" id="workCoverPreview">植物图版封面</div>
+                <div class="work-cover-actions">
+                  <label class="upload-btn">
+                    <span>＋ 上传封面</span>
+                    <input id="workCoverInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden>
+                  </label>
+                  <button class="text-btn" id="removeWorkCoverBtn" type="button">移除封面</button>
+                </div>
+                <p class="editor-note" id="workCoverStatus">没有封面图时，会按作品序号显示植物图版封面。</p>
+              </div>
+
+              <p class="editor-note" id="workEditorStatus"></p>
             </form>
           </section>
         </div>
@@ -360,6 +447,10 @@
             <span>旅行图片目录</span>
             <input id="settingsTravelMediaPathInput" type="text">
           </label>
+          <label class="field">
+            <span>作品图片目录</span>
+            <input id="settingsWorksMediaPathInput" type="text">
+          </label>
           <div class="settings-note">
             <strong>Token</strong>
             <span id="tokenStatus">当前标签页已连接</span>
@@ -374,6 +465,6 @@
   </section>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="js/admin.js?v=20261102c"></script>
+  <script type="module" src="js/admin.js?v=20261103a"></script>
 </body>
 </html>

@@ -1194,3 +1194,39 @@ a {
   }
 }
 
+/* ------------------------------------------------------------------- works */
+
+.work-cover-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding-top: 4px;
+  border-top: 1px solid var(--admin-line);
+}
+
+.work-cover-preview {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  overflow: hidden;
+  border: 1px solid rgba(120, 110, 84, 0.18);
+  background: #e7ddca;
+  color: #8d8470;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.work-cover-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.work-cover-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+

@@ -14,12 +14,12 @@
     - `works.html`：Coding 作品（B 版博物图鉴图版）
     - `writing.html` / `article.html`：写作页信笺 / 图鉴纸页
     - `admin.html`：Git 内容管理后台（noindex，首页页脚有低调入口）
-    - `content/site.json`：后台管理的个人资料 + 文章内容（展示页读取）
+    - `content/site.json`：后台管理的个人资料 + 文章 + 旅行 + 作品内容（展示页读取）
     - `js/data.js`：旅行、作品、文章 fallback 数据
     - `js/home.js`：首页花卉分层视差
     - `js/profile.js`：首页姓名 / 标语 / 短句读取内容文件
     - `js/content-store.js`：展示页加载 `content/site.json`，失败时回退 `data.js`
-    - `js/pages.js`：作品卡片、文章详情、滚动入场和装饰视差
+    - `js/pages.js`：作品卡片（含可选封面）、文章详情、滚动入场和装饰视差
     - `js/carousel3d.js`：Three.js 3D 旋转木马场景
     - `js/writing-room.js`：写作页信纸卡片与鼠标分层视差
     - `js/admin.js` / `js/github-client.js`：后台交互与 GitHub Contents API
@@ -73,9 +73,9 @@
 - 原生 HTML / CSS / JS，除非用户同意，不引入构建工具和框架。
 - 样式用 CSS 变量管理配色、字体、间距；布局优先响应式。
 - 尊重 `prefers-reduced-motion`，动效不能影响阅读。
-- 内容后台是纯静态方案：GitHub Fine-grained Token 只放 `sessionStorage`；绝不把 Token 写入仓库、URL、日志或 localStorage。
-- 内容源：文章 / 个人资料在 `site/content/site.json`；作品 / 旅行仍在 `site/js/data.js`。改后台时不要改展示页视觉与布局。
-- 后台保存使用 GitHub Contents API；图片放 `site/assets/images/uploads/`（路径可通过后台设置调整）。上传前校验类型和大小。
+- 内容后台是纯静态方案：GitHub Fine-grained Token 只放 `sessionStorage`；绝不把 Token 写入仓库、URL、日志或 localStorage。后台现在管理文章、作品、个人资料和旅行（省份状态 / 文案 / 多图）。
+- 内容源：文章 / 个人资料 / 旅行 / 作品都在 `site/content/site.json`。写作页、文章页、首页、旅行页、作品页通过 `content-store.js` 读取，失败时回退 `data.js`。改后台时不要改展示页视觉与布局。
+- 后台保存使用 GitHub Contents API；文章图片放 `site/assets/images/uploads/`，旅行照片放 `site/assets/images/travel/`，作品封面放 `site/assets/images/works/`（路径可通过后台设置调整）。上传前校验类型和大小。
 - 后台页面必须保持 `noindex, nofollow`；管理入口只在首页页脚，低调显示。
 - 不要为了后台登录引入前端密码校验；纯静态页面没有安全的密码后端。
 - 图片放 `site/assets/` 或 `layout-editor/assets/`，文件名用英文 / 拼音 + 短横线，避免空格和中文路径。

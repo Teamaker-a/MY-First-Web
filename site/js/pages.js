@@ -1,5 +1,4 @@
-import { works } from './data.js?v=20261029a';
-import { loadSiteContent } from './content-store.js?v=20261102a';
+import { loadSiteContent } from './content-store.js?v=20261103a';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const page = document.body.dataset.page;
@@ -53,12 +52,15 @@ function workCard(work, index) {
     .join('');
   const tilts = ['-0.35deg', '0.4deg', '-0.15deg'];
 
+  const cover = safeImageSrc(work.cover);
+
   return `
     <a class="sb-work reveal" href="${esc(href)}"${external ? ' target="_blank" rel="noreferrer"' : ''}
        ${hasLink ? '' : 'data-placeholder="true" aria-disabled="true"'}
        style="--accent:${esc(work.accent || '#52604c')};--tilt:${tilts[index % tilts.length]}">
       <span class="sb-tape" aria-hidden="true"></span>
       <div class="sb-work-cover">
+        ${cover ? `<img class="sb-cover-photo" src="${esc(cover)}" alt="" loading="lazy">` : ''}
         <div class="cover-topline">
           <span>PLATE ${number}</span>
           <span>${esc(work.year)}</span>
@@ -81,9 +83,10 @@ function workCard(work, index) {
     </a>`;
 }
 
-function renderWorks() {
+async function renderWorks() {
   const box = $('#worksGrid');
   if (!box) return;
+  const { works } = await loadSiteContent();
   box.innerHTML = works.map(workCard).join('');
   box.querySelectorAll('.sb-work[data-placeholder="true"]').forEach((card) => {
     card.addEventListener('click', (event) => event.preventDefault());
@@ -191,7 +194,7 @@ function initParallax() {
 }
 
 async function init() {
-  if (page === 'works') renderWorks();
+  if (page === 'works') await renderWorks();
   if (page === 'article') await renderArticle();
   initReveal();
   initParallax();

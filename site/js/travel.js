@@ -1,6 +1,6 @@
 import * as THREE from '../vendor/three.module.js';
 import { travel as fallbackTravel } from './data.js';
-import { loadSiteContent } from './content-store.js?v=20261102a';
+import { loadSiteContent } from './content-store.js?v=20261103a';
 import { MusicBox } from './music.js';
 import { createCarousel3D } from './carousel3d.js';
 

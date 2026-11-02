@@ -1,4 +1,4 @@
-import { site as fallbackProfile, articles as fallbackArticles, travel as fallbackTravel } from './data.js?v=20261029a';
+import { site as fallbackProfile, articles as fallbackArticles, travel as fallbackTravel, works as fallbackWorks } from './data.js?v=20261029a';
 
 const CONTENT_URL = new URL('../content/site.json', import.meta.url);
 
@@ -19,6 +19,20 @@ function normalizeArticles(list) {
           .split(/\n\s*\n/)
           .map((block) => block.trim())
           .filter(Boolean),
+  }));
+}
+
+function normalizeWorks(list) {
+  if (!Array.isArray(list)) return null;
+  return list.map((work, index) => ({
+    ...work,
+    title: String(work.title || `作品 ${index + 1}`),
+    type: String(work.type || '网页 / 排版'),
+    year: String(work.year || ''),
+    desc: String(work.desc || ''),
+    link: String(work.link || ''),
+    accent: String(work.accent || '#52604c'),
+    cover: String(work.cover || ''),
   }));
 }
 
@@ -62,6 +76,7 @@ function fallbackContent() {
     profile: { ...fallbackProfile },
     articles: normalizeArticles(fallbackArticles) || [],
     travel: normalizeTravel(fallbackTravel),
+    works: normalizeWorks(fallbackWorks) || [],
   };
 }
 
@@ -80,6 +95,7 @@ export async function loadSiteContent() {
       profile,
       articles: normalized ?? normalizeArticles(fallbackArticles) ?? [],
       travel: normalizeTravel(data.travel && typeof data.travel === 'object' ? data.travel : fallbackTravel),
+      works: normalizeWorks(data.works) ?? normalizeWorks(fallbackWorks) ?? [],
     };
   } catch (error) {
     cached = fallbackContent();

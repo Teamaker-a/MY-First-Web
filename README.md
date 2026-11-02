@@ -25,7 +25,7 @@ personal-website/
 │  ├─ article.html           # 文章详情
 │  ├─ admin.html             # Git 内容管理后台（noindex）
 │  ├─ content/
-│  │  └─ site.json            # 后台管理的个人资料 + 文章
+│  │  └─ site.json            # 后台管理的个人资料 + 文章 + 旅行 + 作品
 │  ├─ css/                   # base / home / scrapbook / natural-history / admin / travel / carousel-skin / fonts / intro 等
 │  ├─ js/
 │  │  ├─ data.js             # 旅行、作品与文章 fallback
@@ -34,7 +34,7 @@ personal-website/
 │  │  ├─ content-store.js    # 展示页读取 content/site.json
 │  │  ├─ pages.js            # 作品卡片 / 文章详情 / 入场和装饰视差
 │  │  ├─ writing-room.js     # 写作页信纸卡片 + 分层视差
-│  │  ├─ admin.js            # 后台登录、文章 CRUD、图片上传、资料编辑
+│  │  ├─ admin.js            # 后台登录、文章 / 作品编辑、图片上传、资料与旅行编辑
 │  │  ├─ github-client.js    # GitHub Contents API
 │  │  ├─ travel.js           # 地球 + 中国地图 + 木马交互
 │  │  ├─ carousel3d.js       # Three.js 3D 旋转木马场景
@@ -67,28 +67,30 @@ python -m http.server 8780 --directory site
 ## 当前页面
 
 - **首页**：深墨黑底的法式烫金花卉封面；金线 / 香槟金花卉从四角生长，中心留白，放名字、短句和「作品 / 旅行 / 文章」三个入口。标题分层入场，四角花卉有鼠标视差。
-- **作品**：B 版「博物图鉴」：深鼠尾草绿旧纸、三张奶油纸项目图版、白百合 / 蕨类 / 鼠尾草蝴蝶封面纹样、胶带、边缘蕨类 / 手稿 / 蕾丝，以及一张 `CYGNUS OLOR` 天鹅便签。项目仍是示例内容，链接待补。
+- **作品**：B 版「博物图鉴」：深鼠尾草绿旧纸、三张奶油纸项目图版、白百合 / 蕨类 / 鼠尾草蝴蝶封面纹样、胶带、边缘蕨类 / 手稿 / 蕾丝，以及一张 `CYGNUS OLOR` 天鹅便签。项目文字和封面图可以在后台编辑；没上传封面时保留植物图版外观。
 - **旅行**：暗茶褐 / 灰豆沙棕旧纸底，四周是低透明度的维多利亚花卉 / 鎏金边框和浅米金细星，中心留给地球和标题。进入页面先是 Moooi 式开场：金色星盘纹样 + 文楷大标题「去有风的地方」+ 进入 / SOUND ON，点击后标题放大到裁切、圆形光圈收拢，露出地球。每个浏览器会话播放一次，右上角 SKIP 可跳过。之后是卡通地球（可拖动 / 滚轮缩放）→ 点击进入中国地图 → 去过粉色、最想去蓝色 → 点省份进入 Three.js 3D 旋转木马：官方 Carousel Lamp 贴图的顶篷 / 灯柱 / 底座，一圈悬挂旅行相框，角色暂时是简化占位；木马保留金色装饰，桌面端文字在左侧、手机端文字在上方；支持拖拽视角、滚轮缩放、起风、暂停旋转、日夜切换、背景音乐，点相框放大。地球、文字、导航、地图配色和交互位置都没有改动。
 - **文章**：B 版「博物图鉴」：深鼠尾草绿底上的三张奶油旧纸信笺，带 `PLATE I/II/III` 邮票标签、白百合 / 蕨类 / 鼠尾草蝴蝶、旧书边缘和鼠标视差。点开信纸进入撕边图鉴纸页，页边有白百合、蕨类、旧邮票和金色火漆，正文采用可读的 15–17px 衬线排版与首行缩进。
-- **后台**：`/admin.html`。GitHub Token 登录，新建 / 编辑 / 删除文章，上传图片，修改个人资料，通过 GitHub Contents API 提交到仓库。纯静态、无数据库；Token 只放当前标签页。详细配置见 `docs/02-内容管理后台.md`。
+- **后台**：`/admin.html`。GitHub Token 登录，新建 / 编辑 / 删除文章，上传文章图片，修改个人资料；「作品」页可编辑标题 / 类型 / 年份 / 说明 / 链接，并可上传一张封面图；「旅行」页可选择省份、标记去过 / 最想去、写标题 / 副标题 / 文案、批量上传旅行照片并填写说明。保存通过 GitHub Contents API 提交；纯静态、无数据库；Token 只放当前标签页。详细配置见 `docs/02-内容管理后台.md`。
 
 ## 内容管理后台
 
 - 打开 `http://127.0.0.1:8780/admin.html`，或用首页页脚的「管理」入口。
 - 登录需要 **GitHub Fine-grained Token**（Contents 读写 + Metadata 读取）和仓库信息。
-- 文章数据现在是 `site/content/site.json`；写作页、文章页和首页资料都读取它。作品和旅行数据仍在 `site/js/data.js`。
+- 文章、个人资料、旅行和作品数据现在都以 `site/content/site.json` 为准；写作页、文章页、首页、旅行页和作品页通过 `content-store.js` 读取，加载失败时回退 `site/js/data.js`。
 - 保存会产生 Git commit，GitHub Pages / Netlify / Vercel 监听分支后自动构建。
 - 后台改的是 GitHub 仓库；本地 `site/` 需要 `git pull`，线上等构建完成。
 - 路径怎么填、Token 怎么建、常见错误和安全限制见 [docs/02-内容管理后台.md](docs/02-内容管理后台.md)。
 
 ## 旅行地图数据怎么改
 
+> 也可以在后台「旅行」页直接维护省份状态、文案和照片；下面的 `data.js` 手动方式只在后台不可用或需要恢复示例时使用。
+
 打开 `site/js/data.js`：
 
 - `travel.visited`：去过的省份，用 DataV 的完整省名，例如 `浙江省`、`新疆维吾尔自治区`。
 - `travel.wishlist`：最想去的省份，同样用完整省名。
 - `travel.places`：每个地方的照片和文字。照片加 `src`（放到 `site/assets/images/`），没有 `src` 时会自动生成一张示例插画。
-- `works`：作品内容；文章和资料已迁到 `site/content/site.json`，通过后台维护。
+- `works`：作品 fallback 数据；文章、资料、旅行和作品现在都通过后台写入 `site/content/site.json`，这里只在后台不可用或文件缺少字段时兜底。
 
 当前 `travel.demo = true`，地图上会显示「示例数据 · 待替换」；换成真实数据后改成 `false`。
 

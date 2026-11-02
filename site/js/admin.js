@@ -1,5 +1,5 @@
 import { GitHubApiError, GitHubClient, parseRepo } from './github-client.js?v=20261101a';
-import { travel as fallbackTravel } from './data.js?v=20261029a';
+import { travel as fallbackTravel, works as fallbackWorks } from './data.js?v=20261029a';
 
 const CONFIG_KEY = 'sx-content-admin-config-v1';
 const TOKEN_KEY = 'sx-content-admin-token-v1';
@@ -12,6 +12,7 @@ const DEFAULT_CONFIG = {
   contentPath: 'site/content/site.json',
   mediaPath: 'site/assets/images/uploads',
   travelMediaPath: 'site/assets/images/travel',
+  worksMediaPath: 'site/assets/images/works',
 };
 
 const EMPTY_PROFILE = {
@@ -40,6 +41,7 @@ const state = {
   savedSnapshot: '',
   selectedSlug: null,
   selectedProvince: null,
+  selectedWorkIndex: null,
   isNew: false,
   newArticle: null,
   dirty: false,
@@ -64,6 +66,7 @@ const dom = {
   contentPathInput: document.getElementById('contentPathInput'),
   mediaPathInput: document.getElementById('mediaPathInput'),
   travelMediaPathInput: document.getElementById('travelMediaPathInput'),
+  worksMediaPathInput: document.getElementById('worksMediaPathInput'),
   repoLabel: document.getElementById('repoLabel'),
   branchLabel: document.getElementById('branchLabel'),
   repoLink: document.getElementById('repoLink'),
@@ -74,6 +77,7 @@ const dom = {
   commitLink: document.getElementById('commitLink'),
   articlesPanel: document.getElementById('articlesPanel'),
   profilePanel: document.getElementById('profilePanel'),
+  worksPanel: document.getElementById('worksPanel'),
   travelPanel: document.getElementById('travelPanel'),
   settingsPanel: document.getElementById('settingsPanel'),
   newArticleBtn: document.getElementById('newArticleBtn'),
@@ -109,9 +113,28 @@ const dom = {
   settingsContentPathInput: document.getElementById('settingsContentPathInput'),
   settingsMediaPathInput: document.getElementById('settingsMediaPathInput'),
   settingsTravelMediaPathInput: document.getElementById('settingsTravelMediaPathInput'),
+  settingsWorksMediaPathInput: document.getElementById('settingsWorksMediaPathInput'),
   tokenStatus: document.getElementById('tokenStatus'),
   changeTokenBtn: document.getElementById('changeTokenBtn'),
   newProvinceSelect: document.getElementById('newProvinceSelect'),
+  newWorkBtn: document.getElementById('newWorkBtn'),
+  worksCount: document.getElementById('worksCount'),
+  worksList: document.getElementById('worksList'),
+  workEmpty: document.getElementById('workEmpty'),
+  workForm: document.getElementById('workForm'),
+  workHeading: document.getElementById('workHeading'),
+  viewWorkLink: document.getElementById('viewWorkLink'),
+  deleteWorkBtn: document.getElementById('deleteWorkBtn'),
+  workTitleInput: document.getElementById('workTitleInput'),
+  workTypeInput: document.getElementById('workTypeInput'),
+  workYearInput: document.getElementById('workYearInput'),
+  workLinkInput: document.getElementById('workLinkInput'),
+  workDescInput: document.getElementById('workDescInput'),
+  workCoverInput: document.getElementById('workCoverInput'),
+  workCoverPreview: document.getElementById('workCoverPreview'),
+  workCoverStatus: document.getElementById('workCoverStatus'),
+  removeWorkCoverBtn: document.getElementById('removeWorkCoverBtn'),
+  workEditorStatus: document.getElementById('workEditorStatus'),
   addProvinceBtn: document.getElementById('addProvinceBtn'),
   travelCount: document.getElementById('travelCount'),
   travelList: document.getElementById('travelList'),
@@ -175,15 +198,17 @@ function normalizeConfig(input) {
   const contentPath = cleanPath(raw.contentPath);
   const mediaPath = cleanPath(raw.mediaPath);
   const travelMediaPath = cleanPath(raw.travelMediaPath);
+  const worksMediaPath = cleanPath(raw.worksMediaPath);
 
   if (!contentPath.endsWith('.json')) throw new Error('内容文件路径必须以 .json 结尾。');
   if (!mediaPath) throw new Error('请填写文章图片目录。');
   if (!travelMediaPath) throw new Error('请填写旅行图片目录。');
-  for (const path of [siteRoot, contentPath, mediaPath, travelMediaPath]) {
+  if (!worksMediaPath) throw new Error('请填写作品图片目录。');
+  for (const path of [siteRoot, contentPath, mediaPath, travelMediaPath, worksMediaPath]) {
     if (path && path.split('/').includes('..')) throw new Error('路径里不能包含 ..');
   }
 
-  return { repo, branch, siteRoot, contentPath, mediaPath, travelMediaPath };
+  return { repo, branch, siteRoot, contentPath, mediaPath, travelMediaPath, worksMediaPath };
 }
 
 function loadStoredConfig() {
@@ -262,6 +287,20 @@ function normalizeArticle(article, index) {
   };
 }
 
+function normalizeWorks(list) {
+  if (!Array.isArray(list)) return null;
+  return list.map((work, index) => ({
+    ...work,
+    title: String(work.title || `作品 ${index + 1}`),
+    type: String(work.type || '网页 / 排版'),
+    year: String(work.year || ''),
+    desc: String(work.desc || ''),
+    link: String(work.link || ''),
+    accent: String(work.accent || '#52604c'),
+    cover: String(work.cover || ''),
+  }));
+}
+
 function normalizePhoto(photo, index) {
   if (!photo || typeof photo !== 'object') return { src: '', caption: `第 ${index + 1} 张` };
   return {
@@ -310,6 +349,7 @@ function normalizeContent(raw) {
     travel: normalizeTravel(
       content.travel && typeof content.travel === 'object' ? content.travel : fallbackTravel,
     ),
+    works: normalizeWorks(content.works) ?? normalizeWorks(fallbackWorks) ?? [],
   };
 }
 
@@ -328,6 +368,7 @@ function fillLoginForm(config) {
   dom.contentPathInput.value = config.contentPath || DEFAULT_CONFIG.contentPath;
   dom.mediaPathInput.value = config.mediaPath || DEFAULT_CONFIG.mediaPath;
   dom.travelMediaPathInput.value = config.travelMediaPath || DEFAULT_CONFIG.travelMediaPath;
+  dom.worksMediaPathInput.value = config.worksMediaPath || DEFAULT_CONFIG.worksMediaPath;
 }
 
 function setLoginError(message) {
@@ -350,15 +391,20 @@ function showLogin(message = '') {
 
 function setView(view) {
   state.view = view;
-  const titles = { articles: '文章', profile: '个人资料', travel: '旅行', settings: '设置' };
+  const titles = { articles: '文章', works: '作品', profile: '个人资料', travel: '旅行', settings: '设置' };
   dom.viewTitle.textContent = titles[view] || '文章';
   dom.articlesPanel.hidden = view !== 'articles';
+  dom.worksPanel.hidden = view !== 'works';
   dom.profilePanel.hidden = view !== 'profile';
   dom.travelPanel.hidden = view !== 'travel';
   dom.settingsPanel.hidden = view !== 'settings';
   document.querySelectorAll('.side-link').forEach((button) => {
     button.classList.toggle('active', button.dataset.view === view);
   });
+  if (view === 'works') {
+    renderWorksList();
+    if (state.selectedWorkIndex !== null) fillWorkEditor(state.selectedWorkIndex);
+  }
   if (view === 'profile') fillProfileForm();
   if (view === 'travel') {
     fillProvinceOptions();
@@ -705,6 +751,7 @@ function fillSettingsForm() {
   dom.settingsContentPathInput.value = state.config.contentPath;
   dom.settingsMediaPathInput.value = state.config.mediaPath;
   dom.settingsTravelMediaPathInput.value = state.config.travelMediaPath;
+  dom.settingsWorksMediaPathInput.value = state.config.worksMediaPath;
 }
 
 function handleSaveSettings(event) {
@@ -722,6 +769,7 @@ function handleSaveSettings(event) {
       contentPath: dom.settingsContentPathInput.value,
       mediaPath: dom.settingsMediaPathInput.value,
       travelMediaPath: dom.settingsTravelMediaPathInput.value,
+      worksMediaPath: dom.settingsWorksMediaPathInput.value,
     });
   } catch (error) {
     toast(error.message || '设置格式不正确。', 'error');
@@ -1072,6 +1120,229 @@ async function handleSaveTravel(event) {
   }
 }
 
+function currentWork() {
+  if (!state.content || state.selectedWorkIndex === null) return null;
+  return state.content.works[state.selectedWorkIndex] || null;
+}
+
+function getWorkCoverPreview(work) {
+  const src = String(work?.cover || '');
+  if (!src) return '';
+  if (/^https?:\/\//i.test(src)) return src;
+  const root = (state.config?.siteRoot || '').replace(/^\/+|\/+$/g, '');
+  const repoPath = root ? `${root}/${src}` : src;
+  const encodedPath = repoPath.split('/').map(encodeURIComponent).join('/');
+  return `https://raw.githubusercontent.com/${state.config.repo}/${encodeURIComponent(state.config.branch)}/${encodedPath}`;
+}
+
+function renderWorksList() {
+  if (!dom.worksList || !state.content) return;
+  const works = state.content.works || [];
+  dom.worksCount.textContent = String(works.length);
+  if (!works.length) {
+    dom.worksList.innerHTML = '<p class="article-list-empty">还没有作品。点右上角“新作品”开始。</p>';
+    return;
+  }
+  dom.worksList.innerHTML = works
+    .map((work, index) => {
+      const active = index === state.selectedWorkIndex;
+      return `
+        <button class="article-row${active ? ' active' : ''}" type="button" data-work-index="${index}">
+          <span class="row-meta">${esc(work.type)} · ${esc(work.year)}${work.cover ? ' · 有封面' : ''}</span>
+          <strong>${esc(work.title)}</strong>
+          <small>${esc(work.desc || '还没有项目说明')}</small>
+        </button>`;
+    })
+    .join('');
+}
+
+function renderWorkCover(work) {
+  if (!dom.workCoverPreview) return;
+  const preview = getWorkCoverPreview(work);
+  dom.workCoverPreview.innerHTML = preview
+    ? `<img src="${esc(preview)}" alt="" loading="lazy">`
+    : '植物图版封面';
+  dom.removeWorkCoverBtn.hidden = !work?.cover;
+  dom.workCoverStatus.textContent = work?.cover
+    ? `封面：${work.cover}`
+    : '没有封面图时，会按作品序号显示植物图版封面。';
+}
+
+function fillWorkEditor(index) {
+  const work = state.content.works[index];
+  if (!work) {
+    dom.workForm.hidden = true;
+    dom.workEmpty.hidden = false;
+    return;
+  }
+  state.selectedWorkIndex = index;
+  dom.workEmpty.hidden = true;
+  dom.workForm.hidden = false;
+  dom.workHeading.textContent = work.title || '作品';
+  dom.workTitleInput.value = work.title || '';
+  dom.workTypeInput.value = work.type || '';
+  dom.workYearInput.value = work.year || '';
+  dom.workLinkInput.value = work.link || '';
+  dom.workDescInput.value = work.desc || '';
+  dom.workEditorStatus.textContent = '';
+  const hasLink = work.link && work.link !== '#';
+  dom.viewWorkLink.hidden = !hasLink;
+  if (hasLink) dom.viewWorkLink.href = work.link;
+  renderWorkCover(work);
+}
+
+function selectWork(index) {
+  const work = state.content.works[index];
+  if (!work) return;
+  state.selectedWorkIndex = index;
+  renderWorksList();
+  fillWorkEditor(index);
+}
+
+function addWork() {
+  if (!state.content) return;
+  const year = String(new Date().getFullYear());
+  const accents = ['#566450', '#6a5d47', '#485849'];
+  const work = {
+    title: '新作品',
+    type: '网页 / 排版',
+    year,
+    desc: '',
+    link: '',
+    cover: '',
+    accent: accents[state.content.works.length % accents.length],
+  };
+  state.content.works.push(work);
+  state.selectedWorkIndex = state.content.works.length - 1;
+  renderWorksList();
+  fillWorkEditor(state.selectedWorkIndex);
+  markDirty();
+}
+
+function syncWorkFromForm() {
+  const work = currentWork();
+  if (!work) return;
+  work.title = dom.workTitleInput.value.trim();
+  work.type = dom.workTypeInput.value.trim();
+  work.year = dom.workYearInput.value.trim();
+  work.link = dom.workLinkInput.value.trim();
+  work.desc = dom.workDescInput.value.trim();
+  dom.workHeading.textContent = work.title || '作品';
+}
+
+function handleWorkInput() {
+  syncWorkFromForm();
+  markDirty();
+}
+
+async function handleWorkCoverUpload(file) {
+  if (!file) return;
+  if (!state.client) {
+    toast('还没有连接仓库。', 'error');
+    return;
+  }
+  const work = currentWork();
+  if (!work) {
+    toast('请先选择一个作品。', 'error');
+    return;
+  }
+  if (!file.type.startsWith('image/')) {
+    toast('只能上传图片文件。', 'error');
+    return;
+  }
+  if (file.size > MAX_IMAGE_BYTES) {
+    toast('图片不能超过 5MB。', 'error');
+    return;
+  }
+  dom.workEditorStatus.textContent = '正在上传封面…';
+  try {
+    const extension = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
+    const base = file.name
+      .replace(/\.[^.]+$/, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9_-]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 48) || 'work-cover';
+    const stamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
+    const filename = `${stamp}-${base}.${extension}`;
+    const repoPath = `${state.config.worksMediaPath}/${filename}`;
+    const webPath = webPathForRepo(repoPath);
+    await state.client.uploadBinary(repoPath, await file.arrayBuffer(), `content: upload work cover ${filename}`);
+    work.cover = webPath;
+    markDirty();
+    renderWorkCover(work);
+    dom.workEditorStatus.textContent = '封面上传成功；保存作品后写入内容。';
+  } catch (error) {
+    dom.workEditorStatus.textContent = '封面上传失败。';
+    toast(describeError(error), 'error');
+  } finally {
+    dom.workCoverInput.value = '';
+  }
+}
+
+function handleRemoveWorkCover() {
+  const work = currentWork();
+  if (!work) return;
+  work.cover = '';
+  markDirty();
+  renderWorkCover(work);
+}
+
+async function handleDeleteWork() {
+  const work = currentWork();
+  if (!work) return;
+  if (state.dirty) {
+    toast('请先保存当前修改，再删除作品。', 'error');
+    return;
+  }
+  if (!window.confirm(`确定删除《${work.title}》吗？`)) return;
+  const index = state.selectedWorkIndex;
+  state.content.works.splice(index, 1);
+  const ok = await saveContent(`content: delete work "${work.title}"`);
+  if (!ok) {
+    state.content.works.splice(index, 0, work);
+    updateDirty();
+    return;
+  }
+  const next = state.content.works[index] || state.content.works[index - 1] || null;
+  state.selectedWorkIndex = next ? state.content.works.indexOf(next) : null;
+  state.savedSnapshot = JSON.stringify(state.content);
+  renderWorksList();
+  if (next) fillWorkEditor(state.selectedWorkIndex);
+  else {
+    dom.workForm.hidden = true;
+    dom.workEmpty.hidden = false;
+  }
+  updateDirty();
+}
+
+async function handleSaveWork(event) {
+  event.preventDefault();
+  if (state.isNew) {
+    toast('请先保存或丢弃正在编辑的新文章。', 'error');
+    return;
+  }
+  const work = currentWork();
+  if (!work) {
+    toast('请先选择一个作品。', 'error');
+    return;
+  }
+  syncWorkFromForm();
+  if (!work.title) {
+    dom.workEditorStatus.textContent = '作品标题不能为空。';
+    toast('请填写作品标题。', 'error');
+    return;
+  }
+  const ok = await saveContent(`content: update works "${work.title}"`);
+  if (ok) {
+    dom.workEditorStatus.textContent = '已保存。';
+    state.savedSnapshot = JSON.stringify(state.content);
+    renderWorksList();
+    fillWorkEditor(state.selectedWorkIndex);
+    updateDirty();
+  }
+}
+
 function bindEvents() {
   dom.loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -1085,6 +1356,7 @@ function bindEvents() {
         contentPath: dom.contentPathInput.value,
         mediaPath: dom.mediaPathInput.value,
         travelMediaPath: dom.travelMediaPathInput.value,
+        worksMediaPath: dom.worksMediaPathInput.value,
       });
     } catch (error) {
       setLoginError(error.message || '请检查仓库和路径。');
@@ -1124,6 +1396,19 @@ function bindEvents() {
       markDirty();
     });
   });
+
+  dom.newWorkBtn.addEventListener('click', addWork);
+  dom.worksList.addEventListener('click', (event) => {
+    const row = event.target.closest('[data-work-index]');
+    if (row) selectWork(Number(row.dataset.workIndex));
+  });
+  dom.workForm.addEventListener('submit', handleSaveWork);
+  [dom.workTitleInput, dom.workTypeInput, dom.workYearInput, dom.workLinkInput, dom.workDescInput].forEach((input) => {
+    input.addEventListener('input', handleWorkInput);
+  });
+  dom.workCoverInput.addEventListener('change', () => handleWorkCoverUpload(dom.workCoverInput.files?.[0]));
+  dom.removeWorkCoverBtn.addEventListener('click', handleRemoveWorkCover);
+  dom.deleteWorkBtn.addEventListener('click', handleDeleteWork);
 
   dom.addProvinceBtn.addEventListener('click', addProvince);
   dom.travelList.addEventListener('click', (event) => {
@@ -1194,6 +1479,7 @@ async function connect(token, config) {
   state.user = user;
   state.selectedSlug = content.articles[0]?.slug || null;
   state.selectedProvince = Object.keys(content.travel.places)[0] || null;
+  state.selectedWorkIndex = content.works.length ? 0 : null;
   state.isNew = false;
   state.newArticle = null;
   state.savedSnapshot = JSON.stringify(content);
@@ -1215,6 +1501,8 @@ async function connect(token, config) {
   } else {
     showEmptyEditor();
   }
+  renderWorksList();
+  if (state.selectedWorkIndex !== null) fillWorkEditor(state.selectedWorkIndex);
   fillProfileForm();
   fillProvinceOptions();
   renderTravelList();

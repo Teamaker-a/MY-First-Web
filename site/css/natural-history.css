@@ -895,3 +895,15 @@ body.scrapbook-page ::selection {
   }
 }
 
+/* Optional work cover image, over the printed plate background. */
+.sb-work-cover .sb-cover-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+  filter: saturate(0.48) sepia(0.12) brightness(0.92);
+}
+
