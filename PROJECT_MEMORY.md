@@ -3,11 +3,11 @@
 ## 当前快照
 
 - 更新：2026-11-03
-- 阶段：B 版内页 + Git 内容后台（文章 / 作品 / 资料 / 旅行）+ Netlify 首次部署
+- 阶段：B 版内页 + Git 内容后台（文章 / 作品 / 资料 / 旅行）+ Netlify 已上线
 - 已完成：全站统一为「深色法式烫金首页 + 深鼠尾草绿博物图鉴内页 + 暗茶褐旅行页」。首页是深墨黑底、四角金线 / 香槟金花卉、中心留白、WenKai 大字；作品 / 写作 / 文章已按用户选择的 B 版落地：深鼠尾草绿旧纸、奶油色图版、暗金细线、白百合 / 铃兰 / 天鹅 / 蕨类 / 鼠尾草蝴蝶、老信纸 / 邮票 / 蕾丝；作品卡片改为植物图版，写作页三张纸上带 PLATE 标签，文章详情是撕边博物图鉴纸页；首页页脚新增低调「管理」入口，`admin.html` 支持 GitHub Token 登录、文章 CRUD、作品编辑（含可选封面）、图片上传、个人资料和旅行编辑，保存通过 GitHub Contents API 提交；写作 / 文章 / 作品 / 首页资料 / 旅行都读取 `site/content/site.json`；旅行页保留暗茶褐旧纸 + 维多利亚花卉边框 + 浅米金细星，地球 / 地图 / 木马功能和位置不变；旅行地球有 WebGL / 2D 备用，木马用 Three.js + Carousel Lamp 官方贴图；本地排版编辑器可用。
 - 已确认方向：网站分「Coding 作品 / 旅行地图 / 个人文章」三块；首页负责第一印象，内页负责阅读，旅行页是独立的空间体验。
 - 待替换：真实旅行省份和照片、背景音乐、Coding 作品链接、文章正文、联系方式；用户提供的信纸素材需确认版权；暹罗厘普角色原图带水印，未嵌入。
-- 下一步：填真实内容 → 真机检查 → 将 Netlify 站点设为公开并重新部署最新提交
+- 下一步：填真实内容 → 真机检查 → 确认线上后台保存后的自动部署
 
 ## 当前有效决定
 
@@ -35,7 +35,7 @@
 22. 后台支持文章新建 / 编辑 / 删除、作品新建 / 编辑 / 删除、图片上传（5MB，JPG/PNG/WebP/GIF/AVIF）、个人资料编辑、旅行省份 / 文案 / 多图编辑；保存生成 Git commit，托管平台自动构建。文章 Slug 稳定，写作页链接用 Slug，旧的数字 id 仍兼容。作品封面可选，没封面时保留植物图版外观。
 23. 后台安全边界：静态站没有密码后端，Token 是唯一凭据；不把 Token 写入仓库 / localStorage / URL。后台 `noindex`，首页页脚有「管理」入口。删除文章不清图片；不支持草稿 / 多用户 / 自动合并冲突。
 24. 后台路径默认按「整个项目仓库 + `site/` 发布」配置：`siteRoot=site`、`contentPath=site/content/site.json`、`mediaPath=site/assets/images/uploads`、`travelMediaPath=site/assets/images/travel`、`worksMediaPath=site/assets/images/works`；如果仓库根就是网站根，改成空根 / `content/site.json` / `assets/images/uploads` / `assets/images/travel` / `assets/images/works`。
-25. 2026-11-03 GitHub 仓库 `Teamaker-a/MY-First-Web` 已推送到 Netlify（站点「萨弗莱克斯」，`saflex.netlify.app`）。当前站点仍是私有状态，访问返回 401；需要在 Netlify 后台点「公开」，并重新部署最新提交。GitHub Pages 因 Token 缺少 Pages / Workflows 权限未启用。
+25. 2026-11-03 GitHub 仓库 `Teamaker-a/MY-First-Web` 已通过 Netlify 上线（站点「萨弗莱克斯」，`saflex.netlify.app`），站点已公开。作品编辑器提交 `3421842` 已部署，线上作品页为 3 张卡片，线上后台有「02 作品」。GitHub Pages 因 Token 缺少 Pages / Workflows 权限未启用。
 
 ## 制作与验收状态
 
@@ -51,7 +51,7 @@
 | 视觉参考 | 已收到 | 2026-10-22 的法式烫金 / 手账参考已落实为两个模块；暹罗厘普原图仍只作历史参考，未嵌入 |
 | 真实旅行数据 | 待替换 | `travel.visited` / `wishlist` / `places` 目前是示例 |
 | 真实照片 / 音乐 | 待上传 | 照片未上传；音乐是 WebAudio 示例 |
-| 部署 | 已部署，待公开 | Netlify 站点 `saflex.netlify.app` 已连接 GitHub 仓库；当前私有，访问 401；需点「公开」并重新部署最新提交；GitHub Pages 未启用 |
+| 部署 | 已上线 | Netlify `saflex.netlify.app` 已公开，`3421842` 作品编辑器版本已部署；GitHub Pages 未启用 |
 
 ## 已确认的设计
 
@@ -88,8 +88,8 @@
 - 照片位置目前用自动生成的 SVG 插画占位，替换 `photo.src` 即可。
 - 手机端中国地图受横屏比例限制偏小，靠下方目的地列表补偿。
 - 还没有做部署、SEO、社交分享图和独立文章生成流程。
-- Netlify 站点目前是私有状态，线上地址会返回 401；需要在 Netlify 后台公开，并确认部署的是最新提交。
 - 后台删除文章 / 作品不会清理已上传图片；不支持草稿、版本对比、多用户、自动合并冲突或定时发布。
+- GitHub Pages 仍未启用；当前线上入口是 Netlify。
 - 个人资料目前只影响首页的姓名 / 标语 / 短句；其他页面的站点品牌文字仍为静态。
 - 文章图片只支持独立成段的 `![alt](路径)`，不支持任意 HTML / 富文本嵌入。
 - 地球纹理是程序绘制的卡通世界地图，后续可按参考图替换成更精细的美术。
@@ -100,7 +100,7 @@
 - 后台是纯静态 GitHub Token 方案；不要把 Token 或密码校验搬到前端本地存储之外，也不要把 Token 提交进仓库。
 - 新增展示内容时优先写 `content/site.json` 并通过后台验证；不要重新把文章硬编码进展示页。
 - 等用户给真实省份、照片、音乐、作品和文章，再通过后台写入 `site/content/site.json`；`data.js` 只作 fallback。
-- 先确认内容、素材版权和真机滚动，再公开 Netlify 站点并检查最新部署。
+- 先确认内容、素材版权和真机滚动；Netlify 已上线，保存后确认自动部署即可。
 - 部署前再检查手机端、加载性能、无障碍和 404。
 
 ## 制作历史
