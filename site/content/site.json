@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-02T13:10:48.477Z",
+  "updatedAt": "2026-11-02T13:23:01.761Z",
   "profile": {
     "name": "无法芝士普通朋友",
     "tagline": "用 AI 做点好玩的",
@@ -35,7 +35,8 @@
       "天津市",
       "重庆市",
       "河南省",
-      "湖北省"
+      "湖北省",
+      "山东省"
     ],
     "wishlist": [
       "新疆维吾尔自治区",
@@ -274,6 +275,38 @@
           {
             "src": "assets/images/travel/20261102131021-_20261102210708_64_457-1.jpg",
             "caption": "哪个小美女给我带的hellokitty呀"
+          }
+        ]
+      },
+      "山东省": {
+        "title": "青岛",
+        "subtitle": "爱琴岛",
+        "note": "海天一色",
+        "wish": false,
+        "photos": [
+          {
+            "src": "assets/images/travel/20261102132045-_20261102211612_65_457-1.jpg",
+            "caption": "很萌的寿司郎的抹茶呀"
+          },
+          {
+            "src": "assets/images/travel/20261102132116-_20261102211613_66_457-1.jpg",
+            "caption": "日落ing"
+          },
+          {
+            "src": "assets/images/travel/20261102132133-_20261102211615_67_457-1.jpg",
+            "caption": "很萌的小男女孩们"
+          },
+          {
+            "src": "assets/images/travel/20261102132202-_20261102211616_68_457-1.jpg",
+            "caption": "这个锅贴巨美味吧"
+          },
+          {
+            "src": "assets/images/travel/20261102132230-_20261102211617_70_457-1.jpg",
+            "caption": "蔚蓝海"
+          },
+          {
+            "src": "assets/images/travel/20261102132247-_20261102211619_72_457-1.jpg",
+            "caption": "蔚蓝海"
           }
         ]
       }
