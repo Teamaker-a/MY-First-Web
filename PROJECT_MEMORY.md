@@ -36,7 +36,7 @@
 23. 后台安全边界：静态站没有密码后端，Token 是唯一凭据；不把 Token 写入仓库 / localStorage / URL。后台 `noindex`，首页页脚有「管理」入口。删除文章不清图片；不支持草稿 / 多用户 / 自动合并冲突。
 24. 后台路径默认按「整个项目仓库 + `site/` 发布」配置：`siteRoot=site`、`contentPath=site/content/site.json`、`mediaPath=site/assets/images/uploads`、`travelMediaPath=site/assets/images/travel`、`worksMediaPath=site/assets/images/works`；如果仓库根就是网站根，改成空根 / `content/site.json` / `assets/images/uploads` / `assets/images/travel` / `assets/images/works`。
 25. 2026-11-03 GitHub 仓库 `Teamaker-a/MY-First-Web` 已通过 Netlify 上线（站点「萨弗莱克斯」，`saflex.netlify.app`），站点已公开。作品编辑器提交 `3421842` 已部署，线上作品页为 3 张卡片，线上后台有「02 作品」。GitHub Pages 因 Token 缺少 Pages / Workflows 权限未启用。
-26. 2026-11-05 旅行页背景音乐改为可商用曲目 **Water Lily** by Kevin MacLeod（incompetech.com，CC BY 4.0）。音频在 `site/assets/audio/water-lily.mp3`，线上 / 本地都循环播放，带淡入淡出、音量和开关；文件缺失或加载失败时回退 WebAudio 合成音乐。署名在旅行木马 credits 行、`CREDITS.md` 和音乐按钮提示中。此前的 Tori Kelly 商业录音只做过本地试听，未提交、未上传，已从项目目录移除。
+26. 2026-11-05 旅行页背景音乐改为可商用曲目 **Water Lily** by Kevin MacLeod（incompetech.com，CC BY 4.0）。音频在 `site/assets/audio/water-lily.mp3`，线上 / 本地都循环播放，带淡入淡出、音量和开关；文件缺失或加载失败时回退 WebAudio 合成音乐。署名在旅行木马 credits 行、`CREDITS.md` 和音乐按钮提示中。提交 `dc1f413` 已部署，线上旅行页可播放。此前的 Tori Kelly 商业录音只做过本地试听，未提交、未上传，已从项目目录移除。
 
 ## 制作与验收状态
 
