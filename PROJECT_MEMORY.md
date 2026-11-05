@@ -36,6 +36,7 @@
 23. 后台安全边界：静态站没有密码后端，Token 是唯一凭据；不把 Token 写入仓库 / localStorage / URL。后台 `noindex`，首页页脚有「管理」入口。删除文章不清图片；不支持草稿 / 多用户 / 自动合并冲突。
 24. 后台路径默认按「整个项目仓库 + `site/` 发布」配置：`siteRoot=site`、`contentPath=site/content/site.json`、`mediaPath=site/assets/images/uploads`、`travelMediaPath=site/assets/images/travel`、`worksMediaPath=site/assets/images/works`；如果仓库根就是网站根，改成空根 / `content/site.json` / `assets/images/uploads` / `assets/images/travel` / `assets/images/works`。
 25. 2026-11-03 GitHub 仓库 `Teamaker-a/MY-First-Web` 已通过 Netlify 上线（站点「萨弗莱克斯」，`saflex.netlify.app`），站点已公开。作品编辑器提交 `3421842` 已部署，线上作品页为 3 张卡片，线上后台有「02 作品」。GitHub Pages 因 Token 缺少 Pages / Workflows 权限未启用。
+26. 2026-11-05 背景音乐加入本地试听通道：`music.js` 在 `localhost` / `127.0.0.1` / `::1` 优先播放 `site/assets/audio/paper-hearts.mp3`，文件缺失或线上访问时回退到 WebAudio 合成音乐。该 MP3 是 Tori Kelly 的商业录音，只用于本地试听，已加入 `.gitignore`，不提交、不上传；线上不加载它。
 
 ## 制作与验收状态
 
@@ -122,3 +123,4 @@
 
 - 2026-11-02：旅行纳入后台。`travel` 加入内容层，`travel.js` 先读 `content/site.json` 再回退 `data.js`；后台新增旅行省份列表、状态、标题 / 副标题 / 文案、多图上传和说明；旅行图片默认 `site/assets/images/travel`。旅行页原有地球、地图、木马交互保持不变。
 - 2026-11-03：作品纳入后台。`works` 加入内容层，作品页改为通过 `content-store.js` 读取；后台新增「作品」页（标题 / 类型 / 年份 / 链接 / 说明 / 可选封面），封面默认上传到 `site/assets/images/works`；展示卡片支持可选封面图，没有封面时保留植物图版。后台导航调整为文章 / 作品 / 个人资料 / 旅行 / 设置。真实仓库中 `content/site.json` 尚无 `works` 字段，展示页会先用 `data.js` 回退，首次保存作品后写入。
+- 2026-11-05：按用户要求加入本地试听音乐。`music.js` 在本地开发地址优先播放 `site/assets/audio/paper-hearts.mp3`，带循环、淡入淡出和开关；线上或文件缺失时回退合成音乐。商业 MP3 被 `.gitignore` 排除，不上传公开站点。

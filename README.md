@@ -96,7 +96,9 @@ python -m http.server 8780 --directory site
 
 ## 背景音乐
 
-现在用的是 `site/js/music.js` 里 WebAudio 合成的示例音乐盒循环，打开目的地时自动播放。之后你把 MP3 / OGG 放到 `site/assets/audio/`，再把 `music.js` 换成 `<audio loop>` 播放即可；也可以直接告诉我，我来接。
+线上用的是 `site/js/music.js` 里 WebAudio 合成的音乐盒循环，打开目的地时自动播放。本地 `127.0.0.1` / `localhost` 会优先读取 `site/assets/audio/paper-hearts.mp3`，文件不存在时自动回退到合成音乐。
+
+这首 MP3 只用于本地试听，已加入 `.gitignore`，不会提交或上传；线上没有这个文件，也不会尝试加载它。要正式上线一首歌，换成有授权的音频并放入 `site/assets/audio/`，再调整 `music.js` 的本地判断即可。
 
 ## 启动排版编辑器
 
