@@ -21,6 +21,3 @@ node_modules/
 
 # Local preview output
 _site_preview/
-
-# Local-only music preview (copyrighted track, never commit/upload)
-site/assets/audio/paper-hearts.mp3

@@ -1,12 +1,10 @@
-// 背景音乐：线上用 WebAudio 合成的音乐盒循环；本地开发时优先播放 assets/audio/paper-hearts.mp3。
-// 这首商业歌曲只用于本地试听，不提交仓库、不上传线上；文件缺失时自动回退到合成音乐。
+// 旅行页背景音乐：Water Lily — Kevin MacLeod (incompetech.com)
+// Licensed under Creative Commons: By Attribution 4.0 License
+// https://creativecommons.org/licenses/by/4.0/
+// 加载失败时自动回退到 WebAudio 合成音乐。
 
-const LOCAL_AUDIO_PATH = new URL('../assets/audio/paper-hearts.mp3', import.meta.url).href;
-const LOCAL_AUDIO_VOLUME = 0.45;
-
-function isLocalPreview() {
-  return ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
-}
+const AUDIO_PATH = new URL('../assets/audio/water-lily.mp3', import.meta.url).href;
+const AUDIO_VOLUME = 0.38;
 
 export class MusicBox {
   constructor() {
@@ -23,15 +21,11 @@ export class MusicBox {
     this.audioStopTimer = null;
   }
 
-  shouldUseLocalAudio() {
-    return isLocalPreview() && !this.audioFailed;
-  }
-
   ensureAudio() {
     if (this.audio) return this.audio;
     const audio = new Audio();
     audio.id = 'travelThemeAudio';
-    audio.src = LOCAL_AUDIO_PATH;
+    audio.src = AUDIO_PATH;
     audio.loop = true;
     audio.preload = 'metadata';
     audio.volume = 0;
@@ -66,11 +60,11 @@ export class MusicBox {
 
   start() {
     if (this.playing) return true;
-    if (this.shouldUseLocalAudio()) return this.startAudio();
-    return this.startSynth();
+    return this.startAudio();
   }
 
   startAudio() {
+    if (this.audioFailed) return this.startSynth();
     try {
       const audio = this.ensureAudio();
       this.cancelAudioStop();
@@ -81,10 +75,11 @@ export class MusicBox {
         playPromise.catch(() => {
           if (!this.playing) return;
           this.playing = false;
+          this.audioFailed = true;
           this.startSynth();
         });
       }
-      this.fadeAudioTo(LOCAL_AUDIO_VOLUME, 900);
+      this.fadeAudioTo(AUDIO_VOLUME, 900);
       return true;
     } catch (error) {
       this.audioFailed = true;

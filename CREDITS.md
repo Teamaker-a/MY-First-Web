@@ -41,6 +41,12 @@
 - 内页的复古英文手稿是 HTML 文本装饰，不是扫描件；胶带、撕边、纸张纹理由 CSS 绘制。
 - 这些新装饰可随项目一起使用；如果之后替换成外部素材，需要另行记录来源和许可。
 
+## 背景音乐
+
+- 旅行页背景音乐：**Water Lily** by Kevin MacLeod ([incompetech.com](https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400035))。
+- 授权：Creative Commons Attribution 4.0 International（CC BY 4.0），允许商用和修改，需要保留署名与许可链接。许可证全文：<https://creativecommons.org/licenses/by/4.0/>。
+- 音频文件：`site/assets/audio/water-lily.mp3`；旅行木马界面的 credits 行和页面音乐按钮的提示文本也保留了署名。
+
 ## 字体
 
 - 首页、旅行页和内页标题使用 **LXGW WenKai Lite（霞鹜文楷 Lite）**，SIL Open Font License 1.1。

@@ -96,9 +96,9 @@ python -m http.server 8780 --directory site
 
 ## 背景音乐
 
-线上用的是 `site/js/music.js` 里 WebAudio 合成的音乐盒循环，打开目的地时自动播放。本地 `127.0.0.1` / `localhost` 会优先读取 `site/assets/audio/paper-hearts.mp3`，文件不存在时自动回退到合成音乐。
+旅行页背景音乐现在是 `site/assets/audio/water-lily.mp3`：Kevin MacLeod 的《Water Lily》，按 CC BY 4.0 授权使用，来源 [incompetech.com](https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400035)。`site/js/music.js` 会循环播放，带淡入淡出、音量和开关；文件缺失或加载失败时自动回退到 WebAudio 合成音乐。
 
-这首 MP3 只用于本地试听，已加入 `.gitignore`，不会提交或上传；线上没有这个文件，也不会尝试加载它。要正式上线一首歌，换成有授权的音频并放入 `site/assets/audio/`，再调整 `music.js` 的本地判断即可。
+署名同时放在旅行木马页的 credits 行、`CREDITS.md` 和页面音乐按钮的提示文本里。替换音乐时保持 `start / stop / toggle` 接口不变即可。
 
 ## 启动排版编辑器
 
